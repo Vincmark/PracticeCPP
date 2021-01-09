@@ -18,5 +18,67 @@
     <ClCompile Include="PracticeCPP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="task2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="task3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="task4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="task5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="task1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="task6.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="task7.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="task8.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="task9.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="task10.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="task2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="task3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="task4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="task5.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="task1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="task6.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="task7.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="task8.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="task9.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="task10.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
