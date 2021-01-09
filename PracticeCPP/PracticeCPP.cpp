@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include "task1.h"
 #include "task2.h"
 #include "task3.h"
@@ -14,8 +15,20 @@
 using namespace std;
 using namespace tasks;
 
+int sum(int a, int b) { return a + b; }
+
+void testSum() {
+    assert(sum(1, 2) == 3);
+    assert(sum(0, 0) == 0);
+    assert(sum(-1, 2) == 1);
+    assert(sum(1, -2) == -1);
+    assert(sum(-1, -2) == -3);
+    cout << "Sum test finished" << endl;
+}
+
 int main()
 {
+    testSum();
     cout << "Hello World!\n";
     task1();
     task2();

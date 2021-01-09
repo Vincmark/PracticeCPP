@@ -1,3 +1,9 @@
+﻿/* Решение простых задач 
+* https://edabit.com/challenges
+
+
+
+*/
 #include <iostream>
 #include "task1.h"
 
