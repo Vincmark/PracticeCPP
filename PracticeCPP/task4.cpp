@@ -1,4 +1,10 @@
-﻿#include <iostream>
+﻿/*
+https://edabit.com/challenges
+
+Very Hard tasks
+
+*/
+#include <iostream>
 #include "task4.h"
 
 void tasks::task4()
@@ -6,31 +12,34 @@ void tasks::task4()
 	std::cout << "Hello Task4!" << std::endl;
 }
 
-/* Task 4_1 -
+/* Task 4_1 - printf Format Security
 
-Take an array of integers (positive or negative or both) and return the sum of the absolute value of each element.
+Tprintf is a standard C function that's a great way to easily print data to the console using format specifiers. That being said, it's common knowledge that you should NEVER give a user the ability to directly set the first parameter of a function that can take format specifiers.
+
+To pass this challenge, you need to find out why users shouldn't be given full control of printf. A vulnerable function will take a string you provide and pass it to printf along with a value you need to modify.
 
 Examples
-getAbsSum([2, -1, 4, 8, 10]) ➞ 25
-getAbsSum([-3, -4, -10, -2, -3]) ➞ 22
-getAbsSum([2, 4, 6, 8, 10]) ➞ 30
-getAbsSum([-1]) ➞ 1
-
+// No examples! The fun is finding the exploit yourself!
 Notes
-The term "absolute value" means to remove any negative sign in front of a number, and to think of all numbers as positive (or zero).
-All the elements in the given array are integers.
+A format specifier is a character set like %s or %f. Look for one that writes to memory.
 
-int getAbsSum(std::vector<int> arr) {
+std::string input = "";
 
+bool vulnerability()
+{
+  bool vuln = false;
+  if (input.size() == 0)
+	return false;
+  printf(input.c_str(), &vuln);
+  return vuln > 0;
 }
 
-Describe(get_abs_sum)
+Describe(return_true)
 {
-  It(test1){Assert::That(getAbsSum({2, -1, -3, 4, 8}), Equals(18));}
-  It(test2){Assert::That(getAbsSum({-1}), Equals(1));}
-  It(test3){Assert::That(getAbsSum({-1, -3, -5, -4, -10, 0}), Equals(23));}
-  It(test4){Assert::That(getAbsSum({8, 9, 10, 32, 101, -10}), Equals(170));}
-  It(test5){Assert::That(getAbsSum({500}), Equals(500));}
+  It(test1)
+  {
+	  Assert::That(vulnerability(), Equals(true));
+  }
 };
 
 */
@@ -40,35 +49,88 @@ void tasks::task4_1()
 	std::cout << "Hello Task4_1!" << std::endl;
 }
 
-/* Task 4_2 -
+/* Task 4_2 - Word Nests (Part 2)
 
-Create a function that counts the number of syllables a word has. Each syllable is separated with a dash -.
+A word nest is created by taking a starting word, and generating a new string by placing the word inside itself. This process is then repeated.
+
+Nesting 3 times with the word "incredible":
+
+start  = incredible
+first  = incre(incredible)dible
+second = increin(incredible)credibledible
+third  = increinincr(incredible)ediblecredibledible
+The final nest is increinincrincredibleediblecredibledible (depth = 3)
+
+Valid word nests can always be collapsed to show the starting word, by reversing the process above:
+
+word = "incredible"
+nest = "increinincrincredibleediblecredibledible"
+
+Steps:
+=> "increinincrincredibleediblecredibledible" // starting nest
+=> "increinincr(incredible)ediblecredibledible" // find word in nest
+=> "increinincr            ediblecredibledible" // remove word
+=> "increinincrediblecredibledible" // join remaining halves
+=> "increin(incredible)credibledible" // find word in nest...
+
+... repeat steps until single word remains
+
+=> "incredible" (return true as "incredible" = word)
+When invalid word nests are collapsed, the starting word isn't found:
+
+word = "spring"
+nest = "sprspspspringringringg"
+
+Steps:
+=> "sprspspspringringringg" // starting nest
+=> "sprspsp(spring)ringringg" // find word in nest
+=> "sprspsp        ringringg" // remove word
+=> "sprspspringringg" // join remaining halves
+=> "sprsp(spring)ringg" // find word in nest...
+
+... repeat steps until single word remains
+
+=> "sprg" (return false as "sprig" != "spring")
+Given a starting word and a final word nest, return true if the word nest is valid. Return false otherwise.
 
 Examples
-numberSyllables("buf-fet") ➞ 2
-numberSyllables("beau-ti-ful") ➞ 3
-numberSyllables("mon-u-men-tal") ➞ 4
-numberSyllables("on-o-mat-o-poe-ia") ➞ 6
+validWordNest("deep", "deep") ➞ true
 
+validWordNest("novel", "nonnonovnovnovelelelvelovelvel") ➞ true
+
+validWordNest("painter", "ppaintppapaipainterinternteraintererainter") ➞ false
+// Doesn't show starting word after being collapsed.
+
+validWordNest("shape", "sssshapeshapehahapehpeape") ➞ false
+// Word placed outside, not inside itself.
 Notes
-Don't forget to return the result.
-If you get stuck on a challenge, find help in the Resources tab.
-If you're really stuck, unlock solutions in the Solutions tab.
+Valid word nests can only be created by repeatedly placing the word inside itself, so at any point when collapsing the nest, there should only be one instance of the word to be found.
 
-int numberSyllables(std::string word) {
+bool validWordNest(std::string word, std::string nest) {
 
 }
 
-Describe(number_of_syllables)
+Describe(basic_tests)
 {
-  It(test1){Assert::That(numberSyllables("buf-fet"), Equals(2));}
-  It(test2){Assert::That(numberSyllables("beau-ti-ful"), Equals(3));}
-	It(test3){Assert::That(numberSyllables("mon-u-men-tal"), Equals(4));}
-	It(test4){Assert::That(numberSyllables("on-o-mat-o-poe-ia"), Equals(6));}
-	It(test5){Assert::That(numberSyllables("o-ver-ly"), Equals(3));}
-	It(test6){Assert::That(numberSyllables("pas-try"), Equals(2));}
-	It(test7){Assert::That(numberSyllables("flu-id"), Equals(2));}
-	It(test8){Assert::That(numberSyllables("syl-la-ble"), Equals(3));}
+  It(test1){Assert::That(validWordNest("redeem", "rederedredrredredrerrrederedeememedeemedeemedeeemeemmedeemeemeemem"), Equals(false));}
+	It(test2){Assert::That(validWordNest("survey", "sursursurvsurvssurssursusurveyrveyveyurveyveyurveyeyeyveyvey"), Equals(true));}
+	It(test3){Assert::That(validWordNest("sensation", "sensatissenssensastssenensensasenssensensensationsationsationationtionsationatioionantionensationon"), Equals(false));}
+	It(test4){Assert::That(validWordNest("feed", "feefeeded"), Equals(false));}
+	It(test5){Assert::That(validWordNest("station", "ststatstasstatistationontationtionionation"), Equals(true));}
+	It(test6){Assert::That(validWordNest("quarrel", "quaquarrquarrelrerell"), Equals(false));}
+	It(test7){Assert::That(validWordNest("broadcast", "broadcbroadcastbroadcastast"), Equals(false));}
+	It(test8){Assert::That(validWordNest("diet", "diet"), Equals(true));}
+	It(test9){Assert::That(validWordNest("park", "pppappappapapapapparkarkarkrkrkrkrkkarkrkrarkark"), Equals(false));}
+	It(test10){Assert::That(validWordNest("undermine", "undermiundermundermiunununderundermineminederminedermineneinene"), Equals(true));}
+	It(test11){Assert::That(validWordNest("nail", "nannnailnailailil"), Equals(false));}
+	It(test12){Assert::That(validWordNest("show", "sshssshowhowhowowhow"), Equals(true));}
+	It(test13){Assert::That(validWordNest("demand", "dedemdeamademademandndndmandnd"), Equals(false));}
+	It(test14){Assert::That(validWordNest("publicity", "publicppublicityublicityity"), Equals(true));}
+	It(test15){Assert::That(validWordNest("relief", "rrerelirerreerrereliefliefelielifliefliefefliefelfeief"), Equals(false));}
+	It(test16){Assert::That(validWordNest("pipe", "ppppppipeipeipeipeipeipe"), Equals(true));}
+	It(test17){Assert::That(validWordNest("diagram", "diargdiadidiadiagramgramagramgramam"), Equals(false));}
+	It(test18){Assert::That(validWordNest("salt", "ssaltalt"), Equals(true));}
+	It(test19){Assert::That(validWordNest("pioneer", "pionpippipioppionpiopipioneeroneerneereerioneerneeroneerioneeroneereer"), Equals(true));}
 };
 
 */
@@ -78,32 +140,36 @@ void tasks::task4_2()
 	std::cout << "Hello Task4_2!" << std::endl;
 }
 
-/* Task 4_3 -
+/* Task 4_3 - Number of Paths Between Points
 
-Create a function that returns the string "Burp" with the amount of "r's" determined by the input parameters of the function.
+This challenge deals with finding and counting the number of paths between points on a rectilinear grid. A starting point (x, y) with non-negative integer coordinates is provided. You are only allowed to move horizontally and vertically along the grid. Hence, from (x, y) you may move to (x+1, y), (x-1, y), (x, y+1), or (x, y-1). Your goal is to return to the origin (0, 0) in such a way that you never increase the distance to the origin. The distance is counted as the minimum number of total vertical and horizontal steps to reach the origin.
+
+Create a function that reads a starting location, (x, y) and returns the total number of different paths back to the origin. Two paths are different if there is at least one step on the path that is different even if most of the steps are the same.
 
 Examples
-longBurp(3) ➞ "Burrrp"
-longBurp(5) ➞ "Burrrrrp"
-longBurp(9) ➞ "Burrrrrrrrrp"
+paths(0, 0) ➞ 1
 
+paths(2, 1) ➞ 3
+
+paths(2, 2) ➞ 6
 Notes
-Expect num to always be >= 1.
-Remember to use a capital "B".
-Don't forget to return the result.
+This function can be easily written using recursion. It is STRONGLY recommended (though not necessary) that you use some form of recursion in your solution.
+The return type for this function is a positive integer.
+x and y will always be integers greater than or equal to 0.
 
-std::string longBurp(int num) {
+int paths(int x, int y) {
 
 }
 
-Describe(Burrrrrp)
+Describe(tests)
 {
-	It(test1){Assert::That(longBurp(3), Equals("Burrrp"));}
-	It(test2){Assert::That(longBurp(9), Equals("Burrrrrrrrrp"));}
-	It(test3){Assert::That(longBurp(10), Equals("Burrrrrrrrrrp"));}
-	It(test4){Assert::That(longBurp(13), Equals("Burrrrrrrrrrrrrp"));}
-	It(test5){Assert::That(longBurp(18), Equals("Burrrrrrrrrrrrrrrrrrp"));}
-	It(test6){Assert::That(longBurp(1), Equals("Burp"));}
+  It(test1){Assert::That(paths(0, 0), Equals(1));}
+	It(test2){Assert::That(paths(2, 1), Equals(3));}
+	It(test3){Assert::That(paths(2, 2), Equals(6));}
+	It(test4){Assert::That(paths(6, 9), Equals(5005));}
+	It(test5){Assert::That(paths(0, 8), Equals(1));}
+	It(test6){Assert::That(paths(7, 0), Equals(1));}
+	It(test7){Assert::That(paths(1, 99), Equals(100));}
 };
 
 */
@@ -113,28 +179,70 @@ void tasks::task4_3()
 	std::cout << "Hello Task4_3!" << std::endl;
 }
 
-/* Task 4_4 -
+/* Task 4_4 - Truncatable Primes
 
-Create a function which validates whether a bridge is safe to walk on (i.e. has no gaps in it to fall through).
+A left-truncatable prime is a prime number that contains no 0 digits and, when the first digit is successively removed, the result is always prime.
 
+A right-truncatable prime is a prime number that contains no 0 digits and, when the last digit is successively removed, the result is always prime.
+
+Create a function that takes an integer as an argument and:
+
+If the integer is only a left-truncatable prime, return "left".
+If the integer is only a right-truncatable prime, return "right".
+If the integer is both, return "both".
+Otherwise, return "none".
 Examples
-isSafeBridge("####") ➞ true
-isSafeBridge("## ####") ➞ false
-isSafeBridge("#") ➞ true
+truncatable(9137) ➞ "left"
+// Because 9137, 137, 37 and 7 are all prime.
 
+truncatable(5939) ➞ "right"
+// Because 5939, 593, 59 and 5 are all prime.
+
+truncatable(317) ➞ "both"
+// Because 317, 17 and 7 are all prime and 317, 31 and 3 are all prime.
+
+truncatable(5) ➞ "both"
+// The trivial case of single-digit primes is treated as truncatable from both directions.
+
+truncatable(139) ➞ "none"
+// 1 and 9 are non-prime, so 139 cannot be truncatable from either direction.
+
+truncatable(103) ➞ "none"
+// Because it contains a 0 digit (even though 103 and 3 are primes).
 Notes
-You can expect the bridge's ends connecting it to its surrounding.
+The input integers will not exceed 10^6.
 
-bool isSafeBridge(std::string s) {
+std::string truncatable(int num) {
 
 }
 
-Describe(broken_bridge)
+Describe(basic_tests)
 {
-It(test1){Assert::That(isSafeBridge("####"), Equals(true));}
-It(test2){Assert::That(isSafeBridge("## ####"), Equals(false));}
-It(test3){Assert::That(isSafeBridge("#"), Equals(true));}
-It(test4){Assert::That(isSafeBridge("# #"), Equals(false));}
+  It(test1){Assert::That(truncatable(47), Equals("left"));}
+	It(test2){Assert::That(truncatable(347), Equals("left"));}
+	It(test3){Assert::That(truncatable(62383), Equals("left"));}
+	It(test4){Assert::That(truncatable(79), Equals("right"));}
+	It(test5){Assert::That(truncatable(7331), Equals("right"));}
+	It(test6){Assert::That(truncatable(233993), Equals("right"));}
+	It(test7){Assert::That(truncatable(3797), Equals("both"));}
+	It(test8){Assert::That(truncatable(739397), Equals("both"));}
+	It(test9){Assert::That(truncatable(349), Equals("none"));}
+	It(test10){
+		std::cout << "Single digit number treated as both." << std::endl;
+		Assert::That(truncatable(5), Equals("both"));
+	}
+	It(test11){
+		std::cout << "Starting number is composite." << std::endl;
+		Assert::That(truncatable(2317), Equals("none"));
+	}
+	It(test12){
+		std::cout << "One is not a prime." << std::endl;
+		Assert::That(truncatable(131), Equals("none"));
+	}
+	It(test13){
+		std::cout << "Cannot contain a 0 digit." << std::endl;
+		Assert::That(truncatable(6043), Equals("none"));
+	}
 };
 
 */
@@ -144,34 +252,48 @@ void tasks::task4_4()
 	std::cout << "Hello Task4_4!" << std::endl;
 }
 
-/* Task 4_5 -
+/* Task 4_5 - Same Letter Patterns
 
-Your task is to create a fence worth $1 million. You are given the price of the material (per character), meaning the length of the fence will change depending on the cost of the material.
-Create a function which constructs this pricey pricey fence, using the letter "H" to build.
-constructFence("$50,000") ➞ "HHHHHHHHHHHHHHHHHHHHHHHHHHHH"
-// 20 fence posts were set up ($1,000,000 / $50,000 = 20)
+Create a function that returns true if two strings share the same letter pattern, and false otherwise.
 
 Examples
-constructFence("$50,000") ➞ "HHHHHHHHHHHHHHHHHHHHHHHHHHHH"
-constructFence("$100,000") ➞ "HHHHHHHHHH"
-constructFence("$1,000,000") ➞ "H"
+sameLetterPattern("ABAB", "CDCD") ➞ true
 
+sameLetterPattern("ABCBA", "BCDCB") ➞ true
+
+sameLetterPattern("FFGG", "CDCD") ➞ false
+
+sameLetterPattern("FFFF", "ABCD") ➞ false
 Notes
-You are ordered to spend all of your $1,000,000 budget...
+N/A
 
-std::string constructFence(std::string price) {
+bool sameLetterPattern(std::string str1, std::string str2) {
 
 }
 
-Describe(constructFence_){
-It(test1){Assert::That(constructFence("$50,000"), Equals("HHHHHHHHHHHHHHHHHHHH"));}
-It(test2){Assert::That(constructFence("$100,000"), Equals("HHHHHHHHHH"));}
-It(test3){Assert::That(constructFence("$1,000,000"), Equals("H"));}
-It(test4){Assert::That(constructFence("$500,000"), Equals("HH"));}
-It(test5){Assert::That(constructFence("$20,000"), Equals("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"));}
-It(test6){Assert::That(constructFence("$10,000"), Equals("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"));}
-It(test7){Assert::That(constructFence("$5000"), Equals("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"));}
-It(test8){Assert::That(constructFence("$1000"), Equals("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"));}
+Describe(true_tests)
+{
+  It(test1){Assert::That(sameLetterPattern("ABAB", "CDCD"), Equals(true));}
+	It(test2){Assert::That(sameLetterPattern("AAABBB", "CCCDDD"), Equals(true));}
+	It(test3){Assert::That(sameLetterPattern("ABCBA", "BCDCB"), Equals(true));}
+	It(test4){Assert::That(sameLetterPattern("AAAA", "BBBB"), Equals(true));}
+	It(test5){Assert::That(sameLetterPattern("BAAB", "ABBA"), Equals(true));}
+	It(test6){Assert::That(sameLetterPattern("BAAB", "QZZQ"), Equals(true));}
+	It(test7){Assert::That(sameLetterPattern("TTZZVV", "PPSSBB"), Equals(true));}
+	It(test8){Assert::That(sameLetterPattern("ZYX", "ABC"), Equals(true));}
+	It(test9){Assert::That(sameLetterPattern("AABAA", "SSCSS"), Equals(true));}
+	It(test10){Assert::That(sameLetterPattern("AABAABAA", "SSCSSCSS"), Equals(true));}
+	It(test11){Assert::That(sameLetterPattern("UBUBUBUB", "WEWEWEWE"), Equals(true));}
+};
+
+Describe(false_tests)
+{
+  It(test1){Assert::That(sameLetterPattern("FFGG", "FFG"), Equals(false));}
+	It(test2){Assert::That(sameLetterPattern("FFGG", "CDCD"), Equals(false));}
+	It(test3){Assert::That(sameLetterPattern("FFFG", "GGHI"), Equals(false));}
+	It(test4){Assert::That(sameLetterPattern("FFFF", "ABCD"), Equals(false));}
+	It(test5){Assert::That(sameLetterPattern("ABCA", "ABCD"), Equals(false));}
+	It(test6){Assert::That(sameLetterPattern("ABCAAA", "DDABCD"), Equals(false));}
 };
 
 */
@@ -181,32 +303,42 @@ void tasks::task4_5()
 	std::cout << "Hello Task4_5!" << std::endl;
 }
 
-/* Task 4_6 -
+/* Task 4_6 - Swap the Numbers
 
-This Triangular Number Sequence is generated from a pattern of dots that form a triangle. The first 5 numbers of the sequence, or dots, are:
-1, 3, 6, 10, 15
-This means that the first triangle has just one dot, the second one has three dots, the third one has 6 dots and so on.
-Write a function that gives the number of dots with its corresponding triangle number of the sequence.
+Imagine you have three numbers: a, b, and c. c is equal to either a or b, but you don't know which one. Your task is to create a function that returns whatever number c isn't, out of a and b. So, if c is equal to a, return b, and if c is equal to b, return a. Here's what makes this challenge difficult: you cannot use any if statements.
 
 Examples
-triangle(1) ➞ 1
-triangle(6) ➞ 21
-triangle(215) ➞ 23220
+swap(1, 0, 0) ➞ 1
+// a = 1, b = 0, c = b
+// return a
 
+swap(1, 3, 1) ➞ 3
+// a = 1, b = 3, c = a
+// return b
+
+swap(27, 31, 31) ➞ 27
+// a = 27, b = 31, c = b
+// return a
 Notes
-Check the Resources for info on triangular number sequence.
+To prevent cheating, you also can't call any functions.
+c will always be equal to either a or b.
+a will never equal b.
+a, b, and c will always be integers.
 
-int triangle(int n) {
+int swap(int a, int b, int c){
 
 }
 
-Describe(tests)
-{
-  It(test1){Assert::That(triangle(1), Equals(1));}
-  It(test2){Assert::That(triangle(2), Equals(3));}
-  It(test3){Assert::That(triangle(3), Equals(6));}
-  It(test4){Assert::That(triangle(8), Equals(36));}
-  It(test5){Assert::That(triangle(2153), Equals(2318781));}
+Describe(swap_){
+It(test1){Assert::That(swap(1, 0, 0), Equals(1));}
+It(test2){Assert::That(swap(1, 3, 1), Equals(3));}
+It(test3){Assert::That(swap(27, 31, 31), Equals(27));}
+It(test4){Assert::That(swap(1, 2, 2), Equals(1));}
+It(test5){Assert::That(swap(-3, 4, -3), Equals(4));}
+It(test6){Assert::That(swap(-2, 1, 1), Equals(-2));}
+It(test7){Assert::That(swap(0, 2, 2), Equals(0));}
+It(test8){Assert::That(swap(9, -9, 9), Equals(-9));}
+It(test9){Assert::That(swap(-3, -29, -3), Equals(-29));}
 };
 
 */
@@ -216,30 +348,35 @@ void tasks::task4_6()
 	std::cout << "Hello Task4_6!" << std::endl;
 }
 
-/* Task 4_7 -
+/* Task 4_7 - Split 25 (Part 1)
 
-Create a function that takes in a current mood and return a sentence in the following format: "Today, I am feeling {mood}". However, if no argument is passed, return "Today, I am feeling neutral".
+About a month ago I stumbled upon an interesting problem — something called the 25 split. In the problem, you had to break up 25 into parts, and, from those parts that add to it, try to create the biggest product.
+
+For example, 3 * 22 = 66 or 5 * 5 * 5 * 5 * 5 = 3125. With this first part, return the value of the biggest product possible using natural number parts from a given number, x.
 
 Examples
-moodToday("happy") ➞ "Today, I am feeling happy"
-moodToday("sad") ➞ "Today, I am feeling sad"
-moodToday() ➞ "Today, I am feeling neutral"
+split(5) ➞ 6
+// 3 times 2
 
+split(10) ➞ 36
+// 3 * 3 * 4
+
+split(1) ➞ 1
 Notes
-Check the Resources tab for some helpful information.
+3's are useful...
 
-std::string moodToday(std::string mood) {
+int split(int num) {
 
 }
 
-Describe(mood_string)
+Describe(basic_tests)
 {
-	It(test1){Assert::That(moodToday("happy"), Equals("Today, I am feeling happy"));}
-	It(test2){Assert::That(moodToday("sad"), Equals("Today, I am feeling sad"));}
-	It(test3){Assert::That(moodToday("very happy"), Equals("Today, I am feeling very happy"));}
-	It(test4){Assert::That(moodToday("rather empty inside"), Equals("Today, I am feeling rather empty inside"));}
-	It(test5){Assert::That(moodToday("confused"), Equals("Today, I am feeling confused"));}
-	It(test6){Assert::That(moodToday(), Equals("Today, I am feeling neutral"));}
+  It(test1){Assert::That(split(25), Equals(8748));}
+	It(test2){Assert::That(split(1), Equals(1));}
+	It(test3){Assert::That(split(10), Equals(36));}
+	It(test4){Assert::That(split(5), Equals(6));}
+	It(test5){Assert::That(split(15), Equals(243));}
+	It(test6){Assert::That(split(20), Equals(1458));}
 };
 
 */
@@ -249,27 +386,47 @@ void tasks::task4_7()
 	std::cout << "Hello Task4_7!" << std::endl;
 }
 
-/* Task 4_8 -
+/* Task 4_8 - Caesar's Cipher
 
-Given a pair, return its FIRST value and its SECOND value. Pair will be < int, int >.
+Julius Caesar protected his confidential information by encrypting it using a cipher. Caesar's cipher (check Resources tab for more info) shifts each letter by a number of letters. If the shift takes you past the end of the alphabet, just rotate back to the front of the alphabet. In the case of a rotation by 3, w, x, y and z would map to z, a, b and c.
+
+Create a function that takes a string s (text to be encrypted) and an integer k (the rotation factor). It should return an encrypted string.
 
 Examples
-pairs(std::make_pair(1, 2)) ➞ { 1, 2 }
-pairs(std::make_pair(51, 21)) ➞ { 51, 21 }
-pairs(std::make_pair(512124, 215)) ➞ { 512124, 215 }
+caesarCipher("middle-Outz", 2) ➞ "okffng-Qwvb"
 
+// m -> o
+// i -> k
+// d -> f
+// d -> f
+// l -> n
+// e -> g
+// -    -
+// O -> Q
+// u -> w
+// t -> v
+// z -> b
+
+caesarCipher("Always-Look-on-the-Bright-Side-of-Life", 5)
+➞ "Fqbfdx-Qttp-ts-ymj-Gwnlmy-Xnij-tk-Qnkj"
+
+caesarCipher("A friend in need is a friend indeed", 20)
+➞ "U zlcyhx ch hyyx cm u zlcyhx chxyyx"
 Notes
-N/A
+All test input will be a valid ASCII string.
 
-std::vector<int> pairs(std::pair <int,int> p) {
+std::string caesarCipher(std::string s, int k) {
 
 }
 
-Describe(pair_management)
+Describe(tests)
 {
-	It(test1){Assert::That(pairs(std::make_pair(1, 2)), Equals(std::vector<int>({1, 2})));}
-	It(test2){Assert::That(pairs(std::make_pair(21, 82)), Equals(std::vector<int>({21, 82})));}
-	It(test3){Assert::That(pairs(std::make_pair(4213, 526)), Equals(std::vector<int>({4213, 526})));}
+  It(test1){Assert::That(caesarCipher("middle-Outz", 2), Equals("okffng-Qwvb"));}
+	It(test2){Assert::That(caesarCipher("Always-Look-on-the-Bright-Side-of-Life", 5), Equals("Fqbfdx-Qttp-ts-ymj-Gwnlmy-Xnij-tk-Qnkj"));}
+	It(test3){Assert::That(caesarCipher("A friend in need is a friend indeed", 20), Equals("U zlcyhx ch hyyx cm u zlcyhx chxyyx"));}
+	It(test4){Assert::That(caesarCipher("A Fool and His Money Are Soon Parted.", 27), Equals("B Gppm boe Ijt Npofz Bsf Tppo Qbsufe."));}
+	It(test5){Assert::That(caesarCipher("One should not worry over things that have already happened and that cannot be changed.", 49), Equals("Lkb pelria klq tloov lsbo qefkdp qexq exsb xiobxav exmmbkba xka qexq zxkklq yb zexkdba."));}
+	It(test6){Assert::That(caesarCipher("Back to Square One is a popular saying that means a person has to start over, similar to: back to the drawing board.", 126), Equals("Xwyg pk Omqwna Kja eo w lklqhwn owuejc pdwp iawjo w lanokj dwo pk opwnp kran, oeiehwn pk: xwyg pk pda znwsejc xkwnz."));}
 };
 
 */
@@ -279,36 +436,45 @@ void tasks::task4_8()
 	std::cout << "Hello Task4_8!" << std::endl;
 }
 
-/* Task 4_9 -
+/* Task 4_9 - N-bonacci Numbers
 
-Create a function that takes an array of numbers and returns a new array, sorted in ascending order (smallest to biggest).
+N-bonacci numbers are generalisations of the fibonacci sequence, where the next term is always the sum of the previous N terms. By convention, the first (N-1) terms are all 0 and the Nth term is 1.
 
-Sort numbers array in ascending order.
-If the function's argument is null, an empty array, or undefined; return an empty array.
-Return a new array of sorted numbers.
+The initial 10 terms of the first 5 N-bonacci sequences are therefore:
+
+1-bonacci = 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
+2-bonacci = 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ...
+3-bonacci = 0, 0, 1, 1, 2, 4, 7, 13, 24, 44, ...
+4-bonaaci = 0, 0, 0, 1, 1, 2, 4, 8, 15, 29, ...
+5-bonacci = 0, 0, 0, 0, 1, 1, 2, 4, 8, 16, ...
+Write a function that returns the kth term of the N-bonacci sequence, for two integer arguments N and k.
 
 Examples
-sortNumsAscending([1, 2, 10, 50, 5]) ➞ [1, 2, 5, 10, 50]
-sortNumsAscending([80, 29, 4, -95, -24, 85]) ➞ [-95, -24, 4, 29, 80, 85]
-sortNumsAscending([]) ➞ []
+bonacci(1, 10) ➞ 1
 
+bonacci(2, 10) ➞ 34
+
+bonacci(3, 10) ➞ 44
+
+bonacci(4, 10) ➞ 29
+
+bonacci(5, 10) ➞ 16
 Notes
-Test input can be positive or negative.
+N/A
 
-std::vector<int> sortNumsAscending(std::vector<int> arr) {
+long long int bonacci(int N, int k) {
 
 }
 
-Describe(sort_nums_ascending)
+Describe(basic_tests)
 {
-  It(test1){Assert::That(sortNumsAscending({1, 2, 10, 50, 5}), Equals(std::vector<int>({1, 2, 5, 10, 50})));}
-  It(test2){Assert::That(sortNumsAscending({80, 29, 4, -95, -24, 85}), Equals(std::vector<int>({-95, -24, 4, 29, 80, 85})));}
-  It(test3){Assert::That(sortNumsAscending({47, 51, -17, -16, 91, 47, -85, -8, -16, -27}), Equals(std::vector<int>({-85, -27, -17, -16, -16, -8, 47, 47, 51, 91})));}
-  It(test4){Assert::That(sortNumsAscending({-51, -73, 65, 69, -76, 74, -14}), Equals(std::vector<int>({-76, -73, -51, -14, 65, 69, 74})));}
-  It(test5){Assert::That(sortNumsAscending({45, 98, 35, 65, 97, 21, 33}), Equals(std::vector<int>({21, 33, 35, 45, 65, 97, 98})));}
-  It(test6){Assert::That(sortNumsAscending({-23, -69, -54, -2, -32}), Equals(std::vector<int>({-69, -54, -32, -23, -2})));}
-  It(test7){Assert::That(sortNumsAscending({-21, -9, -96}), Equals(std::vector<int>({-96, -21, -9})));}
-  It(test8){Assert::That(sortNumsAscending({0}), Equals(std::vector<int>({0})));}
+  It(test1){Assert::That(bonacci(2, 7), Equals(8));}
+	It(test2){Assert::That(bonacci(3, 13), Equals(274));}
+	It(test3){Assert::That(bonacci(5, 24), Equals(203513));}
+	It(test4){Assert::That(bonacci(8, 44), Equals(32440904961));}
+	It(test5){Assert::That(bonacci(1, 4), Equals(1));}
+	It(test6){Assert::That(bonacci(2, 2), Equals(1));}
+	It(test7){Assert::That(bonacci(3, 1), Equals(0));}
 };
 
 */
@@ -318,39 +484,43 @@ void tasks::task4_9()
 	std::cout << "Hello Task4_9!" << std::endl;
 }
 
-/* Task 4_10 -
+/* Task 4_10 - Bracket Logic
 
-Create a function that takes an array of numbers and returns a new array, sorted in ascending order (smallest to biggest).
-Usually when you sign up for an account to buy something, your credit card number, phone number or answer to a secret question is partially obscured in some way. Since someone could look over your shoulder, you don't want that shown on your screen. Hence, the website masks these strings.
-Your task is to create a function that takes a string, transforms all but the last four characters into "#" and returns the new masked string.
+Brackets and parentheses in mathematical expressions have to conform to certain logical rules. Every opening bracket must have a closing mate somewhere further down the line. Although brackets can be nested, different types cannot overlap:
+
+([<x+y>+3]-1) makes sense because each set of brackets contains or is contained by another set.
+([<x+y>+3)-1] makes no sense because the parentheses and the square brackets overlap.
+Given a string expression that can contain four types of brackets: () <> [] {}, create a function that returns true if the bracket logic is valid and false if it is not.
 
 Examples
-maskify("4556364607935616") ➞ "############5616"
-maskify("64607935616") ➞ "#######5616"
-maskify("1") ➞ "1"
-maskify("") ➞ ""
+bracketLogic("[<>()]") ➞ true
 
+bracketLogic("[<(>)]") ➞ false
+
+bracketLogic("[(a*b+<7-c>+9]") ➞ false
+// Opening parenthesis has no mate.
+
+bracketLogic("[{(h*i+3)-12]/4*x+2}") ➞ false
+// Square and curly brackets overlap.
+
+bracketLogic("[ab(c/d<e-f+(7*6)>)+2]") ➞ true
 Notes
-The maskify function must accept a string of any length.
-An empty string should return an empty string (fourth example above).
+Any characters other than the brackets can be ignored.
 
-std::string maskify(std::string str) {
+bool bracketLogic(std::string xp) {
 
 }
 
-Describe(the_maskify)
+Describe(basic_tests)
 {
-  It(test1){Assert::That(maskify("4556364607935616"), Equals("############5616"));}
-  It(test2){Assert::That(maskify("64607935616"), Equals("#######5616"));}
-  It(test3){Assert::That(maskify("1"), Equals("1"));}
-  It(test4){Assert::That(maskify(""), Equals(""));}
-  It(test5){Assert::That(maskify("tBy>L/cMe+?<j:6n;C~H"), Equals("################;C~H"));}
-  It(test6){Assert::That(maskify("12"), Equals("12"));}
-  It(test7){Assert::That(maskify("8Ikhlf6yoxPOwi5cB014eWbRumj7vJ"), Equals("##########################j7vJ"));}
-  It(test8){Assert::That(maskify("123"), Equals("123"));}
-  It(test9){Assert::That(maskify(")E$aCU=e\"_"), Equals("######=e\"_"));}
-  It(test10){Assert::That(maskify("2673951408"), Equals("######1408"));}
-  It(test11){Assert::That(maskify("1234"), Equals("1234"));}
+  It(test1){Assert::That(bracketLogic("{b}{y}{ }[x][{{(t)-}{}](t<w(^)>)-b}<[g](x{u[ ]})y>"), Equals(false));}
+	It(test2){Assert::That(bracketLogic("{f}[t[[]]<[+](w)t>u(h)(%){f}[d{e}]{c(/)}<w>][v]"), Equals(true));}
+	It(test3){Assert::That(bracketLogic("[(t)d]</{h}><<a <( )e>[*]{e{e}}<w{x[^]}>>"), Equals(false));}
+	It(test4){Assert::That(bracketLogic("{g}((-) ^>b)[^]{{*<->}(w)(u)(%)}({/}c)(%)[g{b}]<z({<< >w>c}d)[b]>"), Equals(false));}
+	It(test5){Assert::That(bracketLogic("(y)(c)(){[[ ]z] [{+}z[*]]{+}}([d]<y<e>>c)[b][b]"), Equals(true));}
+	It(test6){Assert::That(bracketLogic("((^(b))e>(<d<w>>(({a}/(g)){t</)}b(d)){[v]u})"), Equals(false));}
+	It(test7){Assert::That(bracketLogic("{([%]</>u)<{<y{v}>{<c>h}{y}f}[y]{<*>e}[^]v><[h]d>}[d]"), Equals(true));}
+	It(test8){Assert::That(bracketLogic("{a}{<(^)(b)%>[z]<->e}[{z}%]{<^>g}<[h] ({ }y[*]<v>)>{x[+]<^>}<v>[]"), Equals(true));}
 };
 
 */
@@ -360,35 +530,49 @@ void tasks::task4_10()
 	std::cout << "Hello Task4_10!" << std::endl;
 }
 
-/* Task 4_11 -
+/* Task 4_11 - Longest Alternating Substring
 
-Create a function that takes an array of numbers and returns only the even values.
+Given a string of digits, return the longest substring with alternating odd/even or even/odd digits. If two or more substrings have the same length, return the substring that occurs first.
 
 Examples
-noOdds([1, 2, 3, 4, 5, 6, 7, 8]) ➞ [2, 4, 6, 8]
-noOdds([43, 65, 23, 89, 53, 9, 6]) ➞ [6]
-noOdds([718, 991, 449, 644, 380, 440]) ➞ [718, 644, 380, 440]
+longestSubstring("225424272163254474441338664823") ➞ "272163254"
+// substrings = 254, 272163254, 474, 41, 38, 23
 
+longestSubstring("594127169973391692147228678476") ➞ "16921472"
+// substrings = 94127, 169, 16921472, 678, 476
+
+longestSubstring("721449827599186159274227324466") ➞ "7214"
+// substrings = 7214, 498, 27, 18, 61, 9274, 27, 32
+// 7214 and 9274 have same length, but 7214 occurs first.
 Notes
-Return all even numbers in the order they were given.
-All test cases contain valid numbers ranging from 1 to 3000.
+The minimum alternating substring size is 2.
 
-std::vector<int> noOdds(std::vector<int> arr) {
+std::string longestSubstring(std::string digits) {
 
 }
 
-Describe(no_odds)
+Describe(basic_tests)
 {
-  It(test1){Assert::That(noOdds({1, 2, 3, 4, 5, 6, 7, 8}), Equals(std::vector<int>({2, 4, 6, 8})));}
-  It(test2){Assert::That(noOdds({43, 65, 23, 89, 53, 9, 6}), Equals(std::vector<int>({6})));}
-  It(test3){Assert::That(noOdds({718, 991, 449, 644, 380, 440}), Equals(std::vector<int>({718, 644, 380, 440})));}
-  It(test4){Assert::That(noOdds({148, 6, 16, 85}), Equals(std::vector<int>({148, 6, 16})));}
-  It(test5){Assert::That(noOdds({9, 49, 23}), Equals(std::vector<int>({})));}
-  It(test6){Assert::That(noOdds({34, 43, 32, 49, 40}), Equals(std::vector<int>({34, 32, 40})));}
-  It(test7){Assert::That(noOdds({1232, 1990, 1284, 1391, 1958}), Equals(std::vector<int>({1232, 1990, 1284, 1958})));}
-  It(test8){Assert::That(noOdds({2766, 2651, 2373, 2916, 2397, 2539}), Equals(std::vector<int>({2766, 2916})));}
-  It(test9){Assert::That(noOdds({53, 65, 52, 62, 59}), Equals(std::vector<int>({52, 62})));}
-  It(test10){Assert::That(noOdds({393, 156, 14, 166, 129, 246}), Equals(std::vector<int>({156, 14, 166, 246})));}
+  It(test1){Assert::That(longestSubstring("844929328912985315632725682153"), Equals("56327256"));}
+	It(test2){Assert::That(longestSubstring("769697538272129475593767931733"), Equals("27212947"));}
+	It(test3){Assert::That(longestSubstring("937948289456111258444958189244"), Equals("894561"));}
+	It(test4){Assert::That(longestSubstring("736237766362158694825822899262"), Equals("636"));}
+	It(test5){Assert::That(longestSubstring("369715978955362655737322836233"), Equals("369"));}
+	It(test6){Assert::That(longestSubstring("345724969853525333273796592356"), Equals("496985"));}
+	It(test7){Assert::That(longestSubstring("548915548581127334254139969136"), Equals("8581"));}
+	It(test8){Assert::That(longestSubstring("417922164857852157775176959188"), Equals("78521"));}
+	It(test9){Assert::That(longestSubstring("251346385699223913113161144327"), Equals("638569"));}
+	It(test10){Assert::That(longestSubstring("483563951878576456268539849244"), Equals("18785"));}
+	It(test11){Assert::That(longestSubstring("853667717122615664748443484823"), Equals("474"));}
+	It(test12){Assert::That(longestSubstring("398785511683322662883368457392"), Equals("98785"));}
+	It(test13){Assert::That(longestSubstring("368293545763611759335443678239"), Equals("76361"));}
+	It(test14){Assert::That(longestSubstring("775195358448494712934755311372"), Equals("4947"));}
+	It(test15){Assert::That(longestSubstring("646113733929969155976523363762"), Equals("76523"));}
+	It(test16){Assert::That(longestSubstring("575337321726324966478369152265"), Equals("478369"));}
+	It(test17){Assert::That(longestSubstring("754388489999793138912431545258"), Equals("545258"));}
+	It(test18){Assert::That(longestSubstring("198644286258141856918653955964"), Equals("2581418569"));}
+	It(test19){Assert::That(longestSubstring("643349187319779695864213682274"), Equals("349"));}
+	It(test20){Assert::That(longestSubstring("919331281193713636178478295857"), Equals("36361"));}
 };
 
 */
@@ -398,31 +582,33 @@ void tasks::task4_11()
 	std::cout << "Hello Task4_11!" << std::endl;
 }
 
-/* Task 4_12 -
+/* Task 4_12 - Interprime Numbers
 
-Create a function that takes a string and returns the word count. The string will be a sentence.
+An interprime number is a composite number which is equidistant from two consecutive primes. For example, the interprime 6 is 1 point after 5, a prime, and 1 point before the next prime, 7. Another interprime is 93, which lies midway between primes 89 and 97.
+
+Create a function that takes a number n as input. If n is an interprime number, return an array containing the two consecutive primes between which it lies. If it isn't, return an empty array.
 
 Examples
-countWords("Just an example here move along") ➞ 6
-countWords("This is a test") ➞ 4
-countWords("What an easy task, right") ➞ 5
+interprime(6) ➞ [5, 7]
 
+interprime(9) ➞ [7, 11]
+
+interprime(8) ➞ []
 Notes
-If you get stuck on a challenge, find help in the Resources tab.
-If you're really stuck, unlock solutions in the Solutions tab.
+Interprimes cannot be prime themselves (otherwise the primes would not have been consecutive).
 
-int countWords(std::string str) {
+std::vector<int> interprime(int n) {
 
 }
 
-Describe(count_words)
-{
-  It(test1){Assert::That(countWords("It's high noon"), Equals(3));}
-  It(test2){Assert::That(countWords("Is this easy mode"), Equals(4));}
-  It(test3){Assert::That(countWords("What an easy task, right"), Equals(5));}
-	It(test4){Assert::That(countWords("This is a test"), Equals(4));}
-	It(test5){Assert::That(countWords("Just an example here move along"), Equals(6));}
-	It(test6){Assert::That(countWords("How are you today?"), Equals(4));}
+Describe(interprime_){
+It(test1){Assert::That(interprime(6), Equals(std::vector<int>{5, 7}));}
+It(test2){Assert::That(interprime(9), Equals(std::vector<int>{7, 11}));}
+It(test3){Assert::That(interprime(473), Equals(std::vector<int>{467, 479}));}
+It(test4){Assert::That(interprime(373), Equals(std::vector<int>{}));}
+It(test5){Assert::That(interprime(756), Equals(std::vector<int>{}));}
+It(test6){Assert::That(interprime(413), Equals(std::vector<int>{}));}
+It(test7){Assert::That(interprime(924), Equals(std::vector<int>{919, 929}));}
 };
 
 */
@@ -432,32 +618,50 @@ void tasks::task4_12()
 	std::cout << "Hello Task4_12!" << std::endl;
 }
 
-/* Task 4_13 -
+/* Task 4_13 - 2048 Tiles Slide
 
-A quadratic equation a x² + b x + c = 0 has either 0, 1, or 2 distinct solutions for real values of x. Given a, b and c, you should return the number of solutions to the equation.
+2048 is a game where you need to slide numbered tiles (natural powers of 2) up, down, left or right on a square grid to combine them in a tile with the number 2048.
+
+The sliding procedure is described by the following rules:
+
+Tiles slide as far as possible in the chosen direction until they are stopped by either another tile or the edge of the grid.
+If two tiles of the same number collide while moving, they will merge into a tile with the total value of the two tiles that collided.
+If more than one variant of merging is possible, move direction shows one that will take effect.
+Tile cannot merge with another tile more than one time.
+Sliding is done almost the same for each direction and for each row/column of the grid, so your task is to implement only the left slide for a single row.
 
 Examples
-solutions(1, 0, -1) ➞ 2 // x² - 1 = 0 has two solutions (x = 1 and x = -1).
-solutions(1, 0, 0) ➞ 1 // x² = 0 has one solution (x = 0).
-solutions(1, 0, 1) ➞ 0 // x² + 1 = 0 has no real solutions.
+leftSlide({2, 2, 2, 0}) ➞ {4, 2, 0, 0}
+// Merge left-most tiles first
 
+leftSlide({2, 2, 4, 4, 8, 8}) ➞ {4, 8, 16, 0, 0, 0}
+// Only merge once
+
+leftSlide({0, 2, 0, 2, 4}) ➞ {4, 4, 0, 0, 0}
+
+leftSlide({0, 2, 2, 8, 8, 8}) ➞ {4, 16, 8, 0, 0, 0}
 Notes
-You do not have to calculate the solutions, just return how many there are.
-a will always be non-zero.
+Input row can be of any size (empty too).
+Input row will contain only natural powers of 2 and 0 for empty tiles.
+Keep trailing zeros in the output.
 
-int solutions(int a, int b, int c) {
+std::vector<int> leftSlide(std::vector<int> row) {
 
 }
 
-Describe(basic_tests)
+Describe(tests)
 {
-  It(test1){Assert::That(solutions(1, 0, -1), Equals(2));}
-	It(test2){Assert::That(solutions(1, 0, 0), Equals(1));}
-	It(test3){Assert::That(solutions(1, 0, 1), Equals(0));}
-	It(test4){Assert::That(solutions(200, 420, 800), Equals(0));}
-	It(test5){Assert::That(solutions(200, 420, -800), Equals(2));}
-	It(test6){Assert::That(solutions(1000, 1000, 0), Equals(2));}
-	It(test7){Assert::That(solutions(10000, 400, 4), Equals(1));}
+	It(test1){Assert::That(leftSlide({2, 2, 2, 0}), Equals(std::vector<int>{4, 2, 0, 0}));}
+	It(test2){Assert::That(leftSlide({2, 2, 4, 4, 8, 8}), Equals(std::vector<int>{4, 8, 16, 0, 0, 0}));}
+	It(test3){Assert::That(leftSlide({0, 2, 0, 2, 4}), Equals(std::vector<int>{4, 4, 0, 0, 0}));}
+	It(test4){Assert::That(leftSlide({0, 2, 2, 8, 8, 8}), Equals(std::vector<int>{4, 16, 8, 0, 0, 0}));}
+	It(test5){Assert::That(leftSlide({}), Equals(std::vector<int>{}));}
+	It(test6){Assert::That(leftSlide({0, 0, 0, 0}), Equals(std::vector<int>{0, 0, 0, 0}));}
+	It(test7){Assert::That(leftSlide({0, 0, 0, 2}), Equals(std::vector<int>{2, 0, 0, 0}));}
+	It(test8){Assert::That(leftSlide({2, 0, 0, 0}), Equals(std::vector<int>{2, 0, 0, 0}));}
+	It(test9){Assert::That(leftSlide({8, 2, 2, 4}), Equals(std::vector<int>{8, 4, 4, 0}));}
+	It(test10){Assert::That(leftSlide({2, 4, 2, 4}), Equals(std::vector<int>{2, 4, 2, 4}));}
+	It(test11){Assert::That(leftSlide({1024, 1024, 1024, 512, 512, 256, 256, 128, 128, 64, 32, 32}), Equals(std::vector<int>{2048, 1024, 1024, 512, 256, 64, 64, 0, 0, 0, 0, 0}));}
 };
 
 */
@@ -467,35 +671,34 @@ void tasks::task4_13()
 	std::cout << "Hello Task4_13!" << std::endl;
 }
 
-/* Task 4_14 -
+/* Task 4_14 - Mind the Gap
 
-Create a function that takes a string and returns the number (count) of vowels contained within it.
+A number is gapful if it is at least 3 digits long and is divisible by the number formed by stringing the first and last numbers together. The smallest number that fits this description is 100. First digit is 1, last digit is 0, forming 10, which is a factor of 100. Therefore, 100 is gapful.
+
+Create a function that takes a number n and returns the closest gapful number (including itself). If there are 2 gapful numbers that are equidistant to n, return the lower one.
 
 Examples
-countVowels("Celebration") ➞ 5
-countVowels("Palm") ➞ 1
-countVowels("Prediction") ➞ 4
+gapful(25) ➞ 100
 
+gapful(100) ➞ 100
+
+gapful(103) ➞ 105
 Notes
-a, e, i, o, u are considered vowels (not y).
-All test cases are one word and only contain letters.
+N/A
 
-int countVowels(std::string str) {
+int gapful(int n) {
 
 }
 
-Describe(count_vowels)
+Describe(tests)
 {
-  It(test1){Assert::That(countVowels("Celebration"), Equals(5));}
-  It(test2){Assert::That(countVowels("Palm"), Equals(1));}
-  It(test3){Assert::That(countVowels("Prediction"), Equals(4));}
-  It(test4){Assert::That(countVowels("Suite"), Equals(3));}
-  It(test5){Assert::That(countVowels("Quote"), Equals(3));}
-  It(test6){Assert::That(countVowels("Portrait"), Equals(3));}
-  It(test7){Assert::That(countVowels("Steam"), Equals(2));}
-  It(test8){Assert::That(countVowels("Tape"), Equals(2));}
-  It(test9){Assert::That(countVowels("Nightmare"), Equals(3));}
-  It(test10){Assert::That(countVowels("Convention"), Equals(4));}
+  It(test1){Assert::That(gapful(25), Equals(100));}
+	It(test2){Assert::That(gapful(100), Equals(100));}
+	It(test3){Assert::That(gapful(103), Equals(105));}
+	It(test4){Assert::That(gapful(1442), Equals(1441));}
+	It(test5){Assert::That(gapful(3345), Equals(3333));}
+	It(test6){Assert::That(gapful(4780), Equals(4773));}
+	It(test7){Assert::That(gapful(3078), Equals(3078));}
 };
 
 */
@@ -505,30 +708,48 @@ void tasks::task4_14()
 	std::cout << "Hello Task4_14!" << std::endl;
 }
 
-/* Task 4_15 -
+/* Task 4_15 - The Centrifuge Problem https://edabit.com/challenge/9CY4oowuNA4bGZHjm
 
-Imagine a circle and two squares: a smaller and a bigger one. For the smaller one, the circle is a circumcircle and for the bigger one, an incircle.
-Scale (img, follow the link)
-Create a function, that takes an integer (radius of the circle) and returns the difference of the areas of the two squares.
+A centrifuge, as you probably know, is a laboratory device used to separate fluids based on density. The separation is achieved through centripetal force by spinning a collection of test tubes at high speeds. This means, the configuration needs to be in balance.
+
+Create a function that takes two numbers as arguments n and k and returns true if the configuration is balanced and false if it's not. To check out the formula, look at the resources tab.
+
+The Centrifuge Problem with 6 Holes, n=6
+
+Here are the valid configurations for n = 6, k = 2, 3, 4 and 6.
 
 Examples
-squareAreasDifference(5) ➞ 50
-squareAreasDifference(6) ➞ 72
-squareAreasDifference(7) ➞ 98
+cFuge(6, 4) ➞ true
 
+cFuge(2, 1) ➞ false
+
+cFuge(3, 3) ➞ true
 Notes
-Use only positive integer parameters.
+One test tube k = 1 is never in balance.
+One hole n = 1 is never in balance, even empty.
 
-int squareAreasDifference(int r) {
+bool cFuge(int n, int k) {
 
 }
 
-Describe(tests)
+Describe(basic_tests)
 {
-  It(test1){Assert::That(squareAreasDifference(5), Equals(50));}
-	It(test2){Assert::That(squareAreasDifference(6), Equals(72));}
-	It(test3){Assert::That(squareAreasDifference(7), Equals(98));}
-	It(test4){Assert::That(squareAreasDifference(17), Equals(578));}
+  It(test1){Assert::That(cFuge(6, 4), Equals(true));}
+	It(test2){Assert::That(cFuge(5, 1), Equals(false));}
+	It(test3){Assert::That(cFuge(12, 7), Equals(true));}
+	It(test4){Assert::That(cFuge(1, 1), Equals(false));}
+	It(test5){Assert::That(cFuge(21, 18), Equals(true));}
+	It(test6){Assert::That(cFuge(1, 0), Equals(false));}
+	It(test7){Assert::That(cFuge(4, 2), Equals(true));}
+	It(test8){Assert::That(cFuge(5, 3), Equals(false));}
+	It(test9){Assert::That(cFuge(21, 13), Equals(false));}
+	It(test10){Assert::That(cFuge(3, 3), Equals(true));}
+	It(test11){Assert::That(cFuge(50, 1), Equals(false));}
+	It(test12){Assert::That(cFuge(8, 6), Equals(true));}
+	It(test13){Assert::That(cFuge(9, 5), Equals(false));}
+	It(test14){Assert::That(cFuge(2, 1), Equals(false));}
+	It(test15){Assert::That(cFuge(59, 59), Equals(true));}
+	It(test16){Assert::That(cFuge(11, 4), Equals(false));}
 };
 
 */
@@ -538,34 +759,44 @@ void tasks::task4_15()
 	std::cout << "Hello Task4_15!" << std::endl;
 }
 
-/* Task 4_16 -
+/* Task 4_16 - Ulam Sequence
 
-Create a function that takes a string and returns a string in which each character is repeated once.
+The Ulam sequence starts with:
+
+ulam = [1, 2]
+The next number in the sequence is the smallest positive number that is equal to the sum of 2 distinct numbers (that are already in the sequence) exactly one way. Trivially, this is 3, as there are only 2 numbers in the starting sequence.
+
+ulam = [1, 2, 3]
+The next number is 4, which is the sum of 3+1. 4 is also 2+2, but this equation does not count, as the 2 addends have to be distinct.
+
+ulam = [1, 2, 3, 4]
+The next number cannot be 5, as 5 = 1 + 4, but also 5 = 2 + 3. There should only be one way to make an Ulam number from 2 distinct addends found in the sequence. The next number is 6 (2+4). There are 2 ways to make 7 (1+6 or 3+4), so the next is 8 (2+6). And so on.
+
+ulam = [1, 2, 3, 4, 6, 8, 11, 13, 16, 18, 26, 28, 36, 38, 47, 48, 53, …]
+Create a function that takes a number n and returns the nth number in the Ulam sequence.
 
 Examples
-doubleChar("String") ➞ "SSttrriinngg"
-doubleChar("Hello World!") ➞ "HHeelllloo  WWoorrlldd!!"
-doubleChar("1234!_ ") ➞ "11223344!!__  "
+ulam(4) ➞ 4
 
+ulam(9) ➞ 16
+
+ulam(206) ➞ 1856
 Notes
-All test cases contain valid strings. Don't worry about spaces, special characters or numbers. They're all considered valid characters.
+N/A
 
-std::string doubleChar(std::string str) {
+int ulam(int n) {
 
 }
 
-Describe(double_char)
+Describe(basic_tests)
 {
-  It(test1){Assert::That(doubleChar("String"), Equals("SSttrriinngg"));}
-  It(test2){Assert::That(doubleChar("Hello World!"), Equals("HHeelllloo  WWoorrlldd!!"));}
-  It(test3){Assert::That(doubleChar("1234!_ "), Equals("11223344!!__  "));}
-  It(test4){Assert::That(doubleChar("##^&%%*&%%$#@@!"), Equals("####^^&&%%%%**&&%%%%$$##@@@@!!"));}
-  It(test5){Assert::That(doubleChar("scandal"), Equals("ssccaannddaall"));}
-  It(test6){Assert::That(doubleChar("economics"), Equals("eeccoonnoommiiccss"));}
-  It(test7){Assert::That(doubleChar(" "), Equals("  "));}
-  It(test8){Assert::That(doubleChar("_______"), Equals("______________"));}
-  It(test9){Assert::That(doubleChar("equip gallon read"), Equals("eeqquuiipp  ggaalllloonn  rreeaadd"));}
-  It(test10){Assert::That(doubleChar("baby increase"), Equals("bbaabbyy  iinnccrreeaassee"));}
+  It(test1){Assert::That(ulam(4), Equals(4));}
+	It(test2){Assert::That(ulam(9), Equals(16));}
+	It(test3){Assert::That(ulam(38), Equals(180));}
+	It(test4){Assert::That(ulam(99), Equals(688));}
+	It(test5){Assert::That(ulam(206), Equals(1856));}
+	It(test6){Assert::That(ulam(495), Equals(5597));}
+	It(test7){Assert::That(ulam(577), Equals(6782));}
 };
 
 */
@@ -575,37 +806,96 @@ void tasks::task4_16()
 	std::cout << "Hello Task4_16!" << std::endl;
 }
 
-/* Task 4_17 -
+/* Task 4_17 - Tic Tac Toe
 
-Create a function that takes a string and returns a string with its letters in alphabetical order.
+Create a function that takes an array of char inputs from a Tic Tac Toe game. Inputs will be taken from player1 as "X", player2 as "O", and empty spaces as "#". The program will return the winner or tie results.
 
 Examples
-alphabetSoup("hello") ➞ "ehllo"
-alphabetSoup("edabit") ➞ "abdeit"
-alphabetSoup("hacker") ➞ "acehkr"
-alphabetSoup("geek") ➞ "eegk"
-alphabetSoup("javascript") ➞ "aacijprstv"
+ticTacToe([
+  ["X", "O", "O"],
+  ["O", "X", "O"],
+  ["O", "#", "X"]
+]) ➞ "Player 1 wins"
 
+ticTacToe([
+  ["X", "O", "O"],
+  ["O", "X", "O"],
+  ["X", "#", "O"]
+]) ➞ "Player 2 wins"
+
+ticTacToe([
+  ["X", "X", "O"],
+  ["O", "X", "O"],
+  ["X", "O", "#"]
+]) ➞ "It's a Tie"
 Notes
-You can assume numbers and punctuation symbols won't be included in test cases. You'll only have to deal with single word, alphabetic characters.
+See Resources for more information.
 
-std::string alphabetSoup(std::string str) {
+using namespace std;
+string ticTacToe(vector<vector<char>> inputs) {
 
 }
 
-Describe(alphabet_soup)
-{
-  It(test1){Assert::That(alphabetSoup("hello"), Equals("ehllo"));}
-  It(test2){Assert::That(alphabetSoup("edabit"), Equals("abdeit"));}
-  It(test3){Assert::That(alphabetSoup("hacker"), Equals("acehkr"));}
-  It(test4){Assert::That(alphabetSoup("geek"), Equals("eegk"));}
-  It(test5){Assert::That(alphabetSoup("javascript"), Equals("aacijprstv"));}
-  It(test6){Assert::That(alphabetSoup("credibility"), Equals("bcdeiiilrty"));}
-  It(test7){Assert::That(alphabetSoup("apostrophe"), Equals("aehoopprst"));}
-  It(test8){Assert::That(alphabetSoup("determination"), Equals("adeeiimnnortt"));}
-  It(test9){Assert::That(alphabetSoup("win"), Equals("inw"));}
-  It(test10){Assert::That(alphabetSoup("synthesis"), Equals("ehinsssty"));}
-};
+Describe(Tic_tac_toe) {
+	It(T1){Assert::That(ticTacToe({
+  {'X', 'O', 'O'},
+  {'O', 'X', 'O'},
+  {'O', '#', 'X'}
+})
+, Equals ("Player 1 wins"));}
+  It(T2){Assert::That(ticTacToe({
+  {'X', 'O', 'O'},
+  {'O', 'X', 'O'},
+  {'O', '#', 'O'}
+})
+, Equals ("Player 2 wins"));}
+
+  It(T3){Assert::That(ticTacToe({
+  {'X', 'O', 'O'},
+  {'O', 'X', 'O'},
+  {'O', 'O', '#'}
+})
+, Equals ("It's a Tie"));}
+
+  It(T4){Assert::That(ticTacToe({
+  {'X', 'O', 'O'},
+  {'X', 'X', 'O'},
+  {'X', 'O', '#'}
+})
+, Equals ("Player 1 wins"));}
+
+It(T5){Assert::That(ticTacToe({
+  {'X', '#', 'O'},
+  {'X', 'X', 'O'},
+  {'#', 'O', '#'}
+})
+, Equals ("It's a Tie"));}
+
+It(T6){Assert::That(ticTacToe({
+  {'X', 'X', 'X'},
+  {'X', 'O', 'O'},
+  {'O', 'O', 'X'}
+})
+, Equals ("Player 1 wins"));}
+
+  It(T7){Assert::That(ticTacToe({
+  {'X', 'O', 'O'},
+  {'X', 'O', 'O'},
+  {'O', 'X', 'X'}
+})
+, Equals ("Player 2 wins"));}
+ It(T8){Assert::That(ticTacToe({
+  {'X', 'O', 'O'},
+  {'X', 'O', 'O'},
+  {'#', 'X', 'X'}
+})
+, Equals ("It's a Tie"));}
+It(T9){Assert::That(ticTacToe({
+  {'X', 'O', 'O'},
+  {'O', 'O', 'O'},
+  {'#', 'X', 'X'}
+})
+, Equals ("Player 2 wins"));}};
 
 */
 
@@ -614,31 +904,38 @@ void tasks::task4_17()
 	std::cout << "Hello Task4_17!" << std::endl;
 }
 
-/* Task 4_18 -
+/* Task 4_18 - Add Two String Numbers
 
-Create a function that takes an integer and returns an array from 1 to the given number, where:
-If the number can be divided evenly by 4, amplify it by 10 (i.e. return 10 times the number).
-If the number cannot be divided evenly by 4, simply return the number.
+Write a function that adds two numbers. The catch, however, is that the numbers will be strings.
 
 Examples
-amplify(4) ➞ [1, 2, 3, 40]
-amplify(3) ➞ [1, 2, 3]
-amplify(25) ➞ [1, 2, 3, 40, 5, 6, 7, 80, 9, 10, 11, 120, 13, 14, 15, 160, 17, 18, 19, 200, 21, 22, 23, 240, 25]
+addStrNums("4", "5") ➞ "9"
 
+addStrNums("abcdefg", "3") ➞ "-1"
+
+addStrNums("1", "") ➞ "1"
+
+addStrNums("1874682736267235927359283579235789257", "32652983572985729") ➞ "1874682736267235927391936562808774986"
 Notes
-The given integer will always be equal to or greater than 1.
-Include the number (see example above).
+If there are any non-numerical characters, return "-1".
+An empty parameter should be treated as "0".
+Your function should be able to add any size number.
+Your function doesn't have to add negative numbers.
+Zeros at the beginning of the string should be trimmed.
 
-std::vector<int> amplify(int n) {
+std::string addStrNums(std::string num1, std::string num2) {
 
 }
 
-Describe(amplify_four)
+Describe(basic_tests)
 {
-	It(Test1){Assert::That(amplify(1), Equals(std::vector<int>({1})));}
-	It(Test2){Assert::That(amplify(4), Equals(std::vector<int>({1, 2, 3, 40})));}
-	It(Test3){Assert::That(amplify(8), Equals(std::vector<int>({1, 2, 3, 40, 5, 6, 7, 80})));}
-	It(Test4){Assert::That(amplify(25), Equals(std::vector<int>({1, 2, 3, 40, 5, 6, 7, 80, 9, 10, 11, 120, 13, 14, 15, 160, 17, 18, 19, 200, 21, 22, 23, 240, 25})));}
+  It(test1){Assert::That(addStrNums("", ""), Equals("0"));}
+	It(test2){Assert::That(addStrNums("1", "01"), Equals("2"));}
+	It(test3){Assert::That(addStrNums("1",""), Equals("1"));}
+	It(test4){Assert::That(addStrNums("198547982570192857109283570192837509218375091283750192835710298357019237509125710925710923759012375901275901285701925712035712983571092562945875310962518235712385971230956127856123571209358712905610923587102395716258125612095710298","510298570192857910827519027510982561875691857120958371029586187585198273501982573091857091875901875809175091659812750918275091875091857918265901265918659816591750981750981759817598175089175891720570129571098758901750917501975"), Equals("198548492868763049967194397711865020200936966975607313794081327943206822707399212908284015616104251803151710460793585524786631258662967654803793576863784154372202562981937878837883388807533802081502644157231966815017027363013212273"));}
+	It(test5){Assert::That(addStrNums("0000001", "020006"), Equals("20007"));}
+	It(test6){Assert::That(addStrNums("1325123515s238579875987", "38698592523525325"), Equals("-1"));}
+	It(test7){Assert::That(addStrNums("123456788654323456543456765432345678843234567150666666666666612735980127350918265309182653091635916258165871265087126121827562875835613875612875360182653127560192756012975608172560817653081760126578132617265192561923051397585261519826512951827401928470192864312873561298357120985710927561287356129857120851235612835712935612385971230598612035912635189273651289357120983571298035612836518237481235098172350891623508912375981206598127539128035619286350912836509123856710298560918236590138257013257219857182935681923569032656109851629851605109283560192863598126359125710982375918237598125091256012893570128357128935609128350192873501928365019283750129837401928374019283740189237401298374019823740912365012381075109823650912837501923561023650123659812375091862350912735", "1023570192835719836509165309156091653091875309312365123569182365123051235710298365109236501928365019283650291836501928365091256109823560921865091263509126509126350921568091265309128653091263590165309160912653809126510560165016501650650165016835610285172356137845623745623592835692836592837569283756832795693827564"), Equals("123456788654323456543456765432345678843234567150666666666666612735980127350918265309182653091635916258165871265087126121827562875835613875612875360182653127560192756012975608172560817653081760126578132617265192561923051397585261519826512951827401928470192864312873561298357120985710927561287356129857120851235612835712935612385971230598612035912635189273651289357120983571298035612836518237481235098172350891623508912375981206598127539128035619286350913860079316692430135070083545746229910105132529169548059251105934155707345561928216714345785488557882881776650962212910741009493707948652177877984833637483638061960049918284138811057018110547340295146562841027828410250749402417800024669988757747975297553431247669274658461094759253860242961229096131924658044740299"));}
 };
 
 */
@@ -648,39 +945,52 @@ void tasks::task4_18()
 	std::cout << "Hello Task4_18!" << std::endl;
 }
 
-/* Task 4_19 -
+/* Task 4_19 - Look-and-Say Sequence
 
-Given a total due and an array representing the amount of change in your pocket, determine whether or not you are able to pay for the item. Change will always be represented in the following order: quarters, dimes, nickels, pennies.
-To illustrate: changeEnough([25, 20, 5, 0], 4.25) should yield true, since having 25 quarters, 20 dimes, 5 nickels and 0 pennies gives you 6.25 + 2 + .25 + 0 = 8.50.
+Create a function that takes in two positive integers start and n and returns a list of the first n terms of the look-and-say sequence starting at the given start.
+
+Each term of the look-and-say sequence (except for the first term) is created from the previous term using the following process.
+
+Start with a term in the sequence (for example, 111312211):
+
+111312211
+Split it into subsequences of consecutive repeating digits:
+
+111 3 1 22 11
+Count the number of digits in each subsequence:
+
+three 1, one 3, one 1, two 2, two 1
+Turn everything into digits:
+
+3 1, 1 3, 1 1, 2 2, 2 1
+Now combine everything into one number:
+
+3113112221
+So 3113112221 is the next term in the sequence after 111312211.
 
 Examples
-changeEnough([2, 100, 0, 0], 14.11) ➞ false
-changeEnough([0, 0, 20, 5], 0.75) ➞ true
-changeEnough([30, 40, 20, 5], 12.55) ➞ true
-changeEnough([10, 0, 0, 50], 3.85) ➞ false
-changeEnough([1, 0, 5, 219], 19.99) ➞ false
+lookAndSay(1, 7) ➞ {1, 11, 21, 1211, 111221, 312211, 13112221}
 
+lookAndSay(123, 4) ➞ {123, 111213, 31121113, 1321123113}
+
+lookAndSay(70, 5) ➞ {70, 1710, 11171110, 31173110, 132117132110
 Notes
-quarter: 25 cents / $0.25
-dime: 10 cents / $0.10
-nickel: 5 cents / $0.05
-penny: 1 cent / $0.01
+Your output should be an array of integers in the correct sequence..
 
-bool changeEnough(std::vector<int> change, float amountDue) {
+std::vector<long> lookAndSay(long start, int n) {
 
 }
 
-Describe(enough_change_tests)
-{
-	It(enough_change_test_1){Assert::That(changeEnough({0, 0, 20, 5}, 0.75), Equals(true));}
-	It(enough_change_test_2){Assert::That(changeEnough({30, 40, 20, 5}, 12.55), Equals(true));}
-	It(enough_change_test_3){Assert::That(changeEnough({1, 0, 2555, 219}, 127.75), Equals(true));}
-	It(enough_change_test_4){Assert::That(changeEnough({1, 335, 0, 219}, 35.21), Equals(true));}
-	It(not_enough_change_test_1){Assert::That(changeEnough({2, 100, 0, 0}, 14.11), Equals(false));}
-	It(not_enough_change_test_2){Assert::That(changeEnough({10, 0, 0, 50}, 13.85), Equals(false));}
-	It(not_enough_change_test_3){Assert::That(changeEnough({1, 0, 5, 219}, 19.99), Equals(false));}
+Describe(LookAnd_Say) {
+	It(T1){Assert::That(lookAndSay(1, 7), Equals(std::vector<long> { 1, 11, 21, 1211, 111221, 312211, 13112221 }));}
+	It(T2){Assert::That(lookAndSay(123, 4), Equals(std::vector<long> { 123, 111213, 31121113, 1321123113 }));}
+	It(T3){Assert::That(lookAndSay(70, 5), Equals(std::vector<long> { 70, 1710, 11171110, 31173110, 132117132110 }));}
+	It(T4){Assert::That(lookAndSay(111312211, 2), Equals(std::vector<long> { 111312211, 3113112221 }));}
+	It(T5){Assert::That(lookAndSay(2, 8), Equals(std::vector<long> { 2, 12, 1112, 3112, 132112, 1113122112, 311311222112, 13211321322112 }));}
+	It(T6){Assert::That(lookAndSay(144, 4), Equals(std::vector<long> { 144, 1124, 211214, 1221121114 }));}
+	It(T7){Assert::That(lookAndSay(11111111, 3), Equals(std::vector<long> { 11111111, 81, 1811 }));}
+	It(T8){Assert::That(lookAndSay(0, 4), Equals(std::vector<long> { 0, 10, 1110, 3110 }));}
 };
-
 */
 
 void tasks::task4_19()
@@ -688,34 +998,74 @@ void tasks::task4_19()
 	std::cout << "Hello Task4_19!" << std::endl;
 }
 
-/* Task 4_20 -
+/* Task 4_20 - Langton's Ant https://edabit.com/challenge/rKXvJduGjLjbC9QBZ
 
-Create a function that takes a string as its argument and returns the string in reversed order.
+Langton's ant is a two-dimensional Turing machine invented in the late 1980s. The ant starts out on a grid of black and white cells and follows a simple set of rules that has complex emergent behavior.
+
+Langton's ant
+
+The ant can travel in any of the four cardinal directions on each step. The ant moves according to the following rules:
+
+At a white square (1), turn 90° right, flip the color of the square, and move forward one unit.
+At a black square (0), turn 90° left, flip the color of the square, and move forward one unit.
+The grid has no limits and therefore if the ant moves outside the borders, the grid should be expanded with 0s, respectively maintaining the rectangle shape.
+Create a function Langton's Ant with the following parameters:
+
+grid - a two-dimensional array of 1s and 0s
+// representing white and black cells respectively
+
+column - horizontal position of the ant
+
+row - ant's vertical position
+
+n - number of iterations
+
+direction - ant's current direction
+// 0 - north, 1 - east, 2 - south, 3 - west
+// default value will be 0
+... and returns the state of the grid after n iterations.
 
 Examples
-reverse("Hello World") ➞ "dlroW olleH"
-reverse("The quick brown fox.") ➞ ".xof nworb kciuq ehT"
-reverse("Edabit is really helpful!") ➞ "!lufpleh yllaer si tibadE"
+langtons_ant([[1]], 0, 0, 1, 0) ➞ [[0, 0]]
+// Initially facing north (0), at the first iteration the ant turns
+// right because it stands on a white square, 1. After that, it flips
+// the square and moves forward.
 
+langtons_ant([[0]], 0, 0, 1, 0) ➞ [[0, 1]]
+
+langtons_ant([[0, 0, 0], [0, 0, 0], [0, 0, 0]], 2, 2, 10, 1) ➞ [[0, 0, 0, 0], [0, 1, 1, 0], [0, 1, 1, 1], [0, 0, 0, 1]]
 Notes
-You can expect a valid string for all test cases.
+N/A
 
-std::string reverse(std::string str) {
+std::vector<std::vector<int>>
+langtonsAnt(std::vector<std::vector<int>> grid, int column, int row, int n, int direction=0) {
 
 }
 
-Describe(reverse_order)
+Describe(langtonsAnt_)
 {
-  It(test1){Assert::That(reverse("Think different."), Equals(".tnereffid knihT"));}
-  It(test2){Assert::That(reverse("It doesnt make sense to hire smart people and tell them what to do; we hire smart people so they can tell us what to do."), Equals(".od ot tahw su llet nac yeht os elpoep trams erih ew ;od ot tahw meht llet dna elpoep trams erih ot esnes ekam tnseod tI"));}
-  It(test3){Assert::That(reverse("Innovation is the ability to see change as an opportunity - not a threat"), Equals("taerht a ton - ytinutroppo na sa egnahc ees ot ytiliba eht si noitavonnI"));}
-  It(test4){Assert::That(reverse("Everything is based on a simple rule: Quality is the best business plan."), Equals(".nalp ssenisub tseb eht si ytilauQ :elur elpmis a no desab si gnihtyrevE"));}
-  It(test5){Assert::That(reverse("The people who are crazy enough to think they can change the world are the ones who do."), Equals(".od ohw seno eht era dlrow eht egnahc nac yeht kniht ot hguone yzarc era ohw elpoep ehT"));}
-  It(test6){Assert::That(reverse("Dont let the noise of others opinions drown out your own inner voice."), Equals(".eciov renni nwo ruoy tuo nword snoinipo srehto fo esion eht tel tnoD"));}
-  It(test7){Assert::That(reverse("Learn continually; Theres always one more thing to learn."), Equals(".nrael ot gniht erom eno syawla serehT ;yllaunitnoc nraeL"));}
-  It(test8){Assert::That(reverse("Quality is more important than quantity. One home run is much better than two doubles."), Equals(".selbuod owt naht retteb hcum si nur emoh enO .ytitnauq naht tnatropmi erom si ytilauQ"));}
-  It(test9){Assert::That(reverse("Your time is limited so dont waste it living someone elses life."), Equals(".efil sesle enoemos gnivil ti etsaw tnod os detimil si emit ruoY"));}
-  It(test10){Assert::That(reverse("The only way to be truly satisfied is to do what you believe is great work."), Equals(".krow taerg si eveileb uoy tahw od ot si deifsitas ylurt eb ot yaw ylno ehT"));}
+It(test1){Assert::That(langtonsAnt({{1}}, 0, 0, 1, 0), Equals(std::vector<std::vector<int>> {{0,0}}));}
+It(test2){Assert::That(langtonsAnt({{0}}, 0, 0, 1, 0), Equals(std::vector<std::vector<int>> {{0,1}}));}
+It(test3){Assert::That(langtonsAnt({{1}}, 0, 0, 3, 0), Equals(std::vector<std::vector<int>> {{0,1},{0,1}}));}
+It(test4){Assert::That(langtonsAnt({{1}}, 0, 0, 1), Equals(std::vector<std::vector<int>> {{0,0}}));}
+It(test5){Assert::That(langtonsAnt({{0,0,0},{0,0,0},{0,0,0}}, 2, 2, 10, 1), Equals(std::vector<std::vector<int>>
+{{0,0,0,0},
+ {0,1,1,0},
+ {0,1,1,1},
+ {0,0,0,1}}));}
+
+It(test6){Assert::That(langtonsAnt({{0,0,0},{0,0,0},{0,0,0}}, 1, 1, 20, 2), Equals(std::vector<std::vector<int>>
+{{0,0,0,0},
+ {0,1,0,1},
+ {1,0,0,1},
+ {0,1,1,0}}));}
+
+It(test7){Assert::That(langtonsAnt({{0,0,0},{0,0,0},{0,0,0}}, 0, 0, 30, 0), Equals(std::vector<std::vector<int>>
+{{0,1,1,0,0},
+ {1,0,0,1,0},
+ {1,0,1,1,1},
+ {0,0,0,1,1},
+ {0,0,1,1,0}}));}
 };
 
 */
@@ -725,34 +1075,41 @@ void tasks::task4_20()
 	std::cout << "Hello Task4_20!" << std::endl;
 }
 
-/* Task 4_21 -
+/* Task 4_21 - Longest Consecutive Run
 
-Create a function that takes three integer arguments (a, b, c) and returns the amount of integers which are of equal value.
+A consecutive-run is a list of adjacent, consecutive integers. This list can be either increasing or decreasing. Create a function that takes an array of numbers and returns the length of the longest consecutive-run.
 
+To illustrate:
+
+longestRun([1, 2, 3, 5, 6, 7, 8, 9]) ➞ 5
+// Two consecutive runs: [1, 2, 3] and [5, 6, 7, 8, 9] (longest).
 Examples
-equal(3, 4, 3) ➞ 2
-equal(1, 1, 1) ➞ 3
-equal(3, 4, 1) ➞ 0
+longestRun([1, 2, 3, 10, 11, 15]) ➞ 3
+// Longest consecutive-run: [1, 2, 3].
 
+longestRun([5, 4, 2, 1]) ➞ 2
+// Longest consecutive-run: [5, 4] and [2, 1].
+
+longestRun([3, 5, 7, 10, 15]) ➞ 1
+// No consecutive runs, so we return 1.
 Notes
-Your function must return 0, 2 or 3.
+If there aren't any consecutive runs (there is a gap between each integer), return 1.
 
-int equal(int a, int b, int c) {
+int longestRun(std::vector<int> arr) {
 
 }
 
-Describe(tests) {
-	It(m1){std::cout << "Should work if all values are different." << std::endl;}
-	It(test1){Assert::That(equal(2, 3, 4), Equals(0));}
-	It(test2){Assert::That(equal(7, 3, 4), Equals(0));}
-	It(test3){Assert::That(equal(1, 7, 6), Equals(0));}
-	It(m2){std::cout << "Should work if two values are different." << std::endl;}
-	It(test4){Assert::That(equal(7, 3, 7), Equals(2));}
-	It(test5){Assert::That(equal(3, 3, 6), Equals(2));}
-	It(m3){std::cout << "Should work for 3 identical values." << std::endl;}
-	It(test6){Assert::That(equal(4, 4, 4), Equals(3));}
-	It(test7){Assert::That(equal(1, 1, 1), Equals(3));}
-	It(test8){Assert::That(equal(7, 7, 7), Equals(3));}
+Describe(longestRun_) {
+	It(test1){Assert::That(longestRun({1, 2, 3, 5, 6, 7, 8, 9}), Equals(5));}
+	It(test2){Assert::That(longestRun({1, 2, 3, 10, 11, 15}), Equals(3));}
+	It(test3){Assert::That(longestRun({-7, -6, -5, -4, -3, -2, -1}), Equals(7));}
+	It(test4){Assert::That(longestRun({3, 5, 6, 10, 15}), Equals(2));}
+	It(test5){Assert::That(longestRun({3, 5, 7, 10, 15}), Equals(1));}
+	It(test6){Assert::That(longestRun({5, 4, 3, 2, 1}), Equals(5));}
+	It(test7){Assert::That(longestRun({5, 4, 2, 1}), Equals(2));}
+	It(test8){Assert::That(longestRun({10, 9, 0, 5}), Equals(2));}
+	It(test9){Assert::That(longestRun({1, 2, 3, 2, 1}), Equals(3));}
+	It(test10){Assert::That(longestRun({10, 9, 8, 7, 6, 2, 1}), Equals(5));}
 };
 
 */
@@ -762,36 +1119,51 @@ void tasks::task4_21()
 	std::cout << "Hello Task4_21!" << std::endl;
 }
 
-/* Task 4_22 -
+/* Task 4_22 - Chocolates Parcel
 
-Create a function that takes two numbers as arguments (num, length) and returns an array of multiples of num until the array length reaches length.
+Mubashir needs to assemble a parcel of ordered chocolates. He got two types of chocolates:
+
+Small chocolates (2 grams each)
+Big chocolates (5 grams each)
+Create a function that takes three parameters: Number of small available chocolates nSmall, number of big chocolates available nBig and desired weight (in grams) of the final parcel order.
+
+The function should return the required number of small chocolates to achieve the goal. The function should return -1 if the goal cannot be achieved by any possible combinations of small and big chocolates.
 
 Examples
-arrayOfMultiples(7, 5) ➞ [7, 14, 21, 28, 35]
-arrayOfMultiples(12, 10) ➞ [12, 24, 36, 48, 60, 72, 84, 96, 108, 120]
-arrayOfMultiples(17, 6) ➞ [17, 34, 51, 68, 85, 102]
+chocolatesParcel(4, 1, 13) ➞ 4
+// 4 small chocolates = 8 grams
+// 1 big chocolate = 5 grams
+// 8 + 5 = 13 grams
+// Required number of small chocolates = 4
 
+chocolatesParcel(4, 1, 14) ➞ -1
+// You can not make any combination to reach 14 grams.
+
+chocolatesParcel(2, 1, 7) ➞ 1
+// 1 big chocolate = 5 grams
+// 1 small chocolates = 2 grams
+// 5 + 2 = 7 grams
+// Required number of small chocolates = 1
 Notes
-Notice that num is also included in the returned array.
+Maximize the use of big chocolates that are available to achieve the desired goal. And only then should you proceed to use the small chocolates.
+You can't break chocolates into small pieces.
 
-#include <vector>
-
-std::vector<int> arrayOfMultiples(int num, int length) {
+int chocolatesParcel(int nSmall, int nBig, int order) {
 
 }
 
-#include <vector>
 
-using v = std::vector<int>;
-
-Describe(ArrayOfMultiplesTests) {
-	It(test1){Assert::That(arrayOfMultiples(7, 5), Equals(v{7, 14, 21, 28, 35}));}
-	It(test2){Assert::That(arrayOfMultiples(12, 10), Equals(v{12, 24, 36, 48, 60, 72, 84, 96, 108, 120}));}
-	It(test3){Assert::That(arrayOfMultiples(17, 7), Equals(v{17, 34, 51, 68, 85, 102, 119}));}
-	It(test4){Assert::That(arrayOfMultiples(630, 14), Equals(v{630, 1260, 1890, 2520, 3150, 3780, 4410, 5040, 5670, 6300, 6930, 7560, 8190, 8820}));}
-	It(test5){Assert::That(arrayOfMultiples(140, 3), Equals(v{140, 280, 420}));}
-	It(test6){Assert::That(arrayOfMultiples(7, 8), Equals(v{7, 14, 21, 28, 35, 42, 49, 56}));}
-	It(test7){Assert::That(arrayOfMultiples(11, 21), Equals(v{11, 22, 33, 44, 55, 66, 77, 88, 99, 110, 121, 132, 143, 154, 165, 176, 187, 198, 209, 220, 231}));}
+Describe(chocolatesParcel_) {
+	It(test1){Assert::That(chocolatesParcel(0, 1, 5), Equals(0));}
+	It(test2){Assert::That(chocolatesParcel(3, 1, 6), Equals(3));}
+	It(test3){Assert::That(chocolatesParcel(3, 0, 7), Equals(-1));}
+	It(test4){Assert::That(chocolatesParcel(2, 1, 9), Equals(2));}
+	It(test5){Assert::That(chocolatesParcel(58, 156, 283), Equals(4));}
+	It(test6){Assert::That(chocolatesParcel(3, 1000, 5012), Equals(-1));}
+	It(test7){Assert::That(chocolatesParcel(1, 1, 1), Equals(-1));}
+	It(test8){Assert::That(chocolatesParcel(1, 1, 8), Equals(-1));}
+	It(test9){Assert::That(chocolatesParcel(4, 1, 12), Equals(-1));}
+	It(test10){Assert::That(chocolatesParcel(10, 400, 2004), Equals(2));}
 };
 
 */
@@ -801,38 +1173,44 @@ void tasks::task4_22()
 	std::cout << "Hello Task4_22!" << std::endl;
 }
 
-/* Task 4_23 -
+/* Task 4_23 - Coconut Communication
 
-Create a function that takes in an array (slot machine outcome) and returns true if all elements in the array are identical, and false otherwise. The array will contain 4 elements.
+"coconuts" has 8 letters.
+A byte in binary has 8 bits.
+A byte can represent a character.
+We can use the word "coconuts" to communicate with each other in binary if we use upper case letters as 1s and lower case letters as 0s.
 
+Create a function that translates a word in plain text, into Coconut.
+
+Worked Example
+The binary for "coconuts" is
+01100011 01101111 01100011 01101111 01101110 01110101 01110100 01110011
+c         o        c       o       n        u        t       s
+
+Since 0s are lowercase and 1s are uppercase, we can map the binary like this.
+cOConuTS cOCoNUTS cOConuTS cOCoNUTS cOCoNUTs cOCOnUtS cOCOnUts cOCOnuTS
+
+coconut_translator("coconuts") ➞ "cOConuTS cOCoNUTS cOConuTS cOCoNUTS cOCoNUTs cOCOnUtS cOCOnUts cOCOnuTS"
 Examples
-testJackpot(["@", "@", "@", "@"]) ➞ true
-testJackpot(["abc", "abc", "abc", "abc"]) ➞ true
-testJackpot(["SS", "SS", "SS", "SS"]) ➞ true
-testJackpot(["&&", "&", "&&&", "&&&&"]) ➞ false
-testJackpot(["SS", "SS", "SS", "Ss"]) ➞ false
+coconutTranslator("Hi") ➞ "cOcoNuts cOCoNutS"
 
+coconutTranslator("edabit") ➞ "cOConUtS cOConUts cOConutS cOConuTs cOCoNutS cOCOnUts"
+
+coconutTranslator("123") ➞ "coCOnutS coCOnuTs coCOnuTS"
 Notes
-The elements must be exactly identical for there to be a jackpot.
+All inputs will be strings.
+Make sure to separate the coconuts with spaces.
 
-bool testJackpot(std::vector<std::string> result) {
+std::string coconutTranslator(std::string str) {
 
 }
 
-Describe(test_jackpot_tests)
-{
-	// True tests
-	It(true_jackpots_test_1){Assert::That(testJackpot({"@", "@", "@", "@"}), Equals(true));}
-	It(true_jackpots_test_2){Assert::That(testJackpot({"!", "!", "!", "!"}), Equals(true));}
-	It(true_jackpots_test_3){Assert::That(testJackpot({"abc", "abc", "abc", "abc"}), Equals(true));}
-	It(true_jackpots_test_4){Assert::That(testJackpot({"karaoke", "karaoke", "karaoke", "karaoke"}), Equals(true));}
-	It(true_jackpots_test_5){Assert::That(testJackpot({"SS", "SS", "SS", "SS"}), Equals(true));}
-	// False tests
-	It(not_jackpots_test_1){Assert::That(testJackpot({":(", ":)", ":|", ":|"}), Equals(false));}
-	It(not_jackpots_test_2){Assert::That(testJackpot({"&&", "&", "&&&", "&&&&"}), Equals(false));}
-	It(not_jackpots_test_3){Assert::That(testJackpot({"hee", "heh", "heh", "heh"}), Equals(false));}
-	It(not_jackpots_test_4){Assert::That(testJackpot({"SS", "SS", "SS", "Ss"}), Equals(false));}
-	It(not_jackpots_test_5){Assert::That(testJackpot({"SS", "SS", "Ss", "Ss"}), Equals(false));}
+Describe(coconutTranslator_) {
+	It(test1){Assert::That(coconutTranslator("Hi"), Equals("cOcoNuts cOCoNutS"));}
+	It(test2){Assert::That(coconutTranslator("edabit"), Equals("cOConUtS cOConUts cOConutS cOConuTs cOCoNutS cOCOnUts"));}
+	It(test3){Assert::That(coconutTranslator("123"), Equals("coCOnutS coCOnuTs coCOnuTS"));}
+	It(test4){Assert::That(coconutTranslator("coconuts"), Equals("cOConuTS cOCoNUTS cOConuTS cOCoNUTS cOCoNUTs cOCOnUtS cOCOnUts cOCOnuTS"));}
+	It(test5){Assert::That(coconutTranslator(""), Equals(""));}
 };
 
 */
@@ -842,31 +1220,50 @@ void tasks::task4_23()
 	std::cout << "Hello Task4_23!" << std::endl;
 }
 
-/* Task 4_24 -
+/* Task 4_24 - Fraction to Mixed Number
 
-Write a function that changes every letter to the next letter:
-"a" becomes "b"
-"b" becomes "c"
-"d" becomes "e"
-and so on ...
+Create a function that takes a string representing a fraction, and return a string representing that input as a mixed number.
 
+Mixed numbers are of the form 1 2/3 — note the space between the whole number portion and the fraction portion.
+Resulting fractions should be fully reduced (see example #2).
+If a result is a whole number with no fractional remainder, return only the whole number portion (see example #3).
+If a result is only fractional with no whole number, return only the fractional portion (see example #4).
+If a result is negative, the whole number should carry the negative sign. If the result would not have a whole number portion, the numerator of the fractional portion should carry the negative sign (see examples #5 - #7).
 Examples
-move("hello") ➞ "ifmmp"
-move("bye") ➞ "czf"
-move("welcome") ➞ "xfmdpnf"
+mixedNumber("5/4") ➞ "1 1/4"
 
+mixedNumber("6/4") ➞ "1 1/2"
+
+mixedNumber("8/4") ➞ "2"
+
+mixedNumber("4/6") ➞ "2/3"
+
+mixedNumber("-1/4") ➞ "-1/4"
+
+mixedNumber("-5/4") ➞ "-1 1/4"
+
+mixedNumber("-8/4") ➞ "-2"
 Notes
-There will be no z's in the tests.
+All provided inputs will be formatted similarly, negative numbers will be provided in the numerator portion only, and all inputs will contain no spaces, invalid characters, or zero denominators.
 
-std::string move(std::string word) {
+std::string mixedNumber(std::string frac) {
 
 }
 
-Describe(letter_to_next_letter)
+Describe(basic_tests)
 {
-  It(test1){Assert::That(move("hello"), Equals("ifmmp"));}
-	It(test2){Assert::That(move("lol"), Equals("mpm"));}
-	It(test3){Assert::That(move("bye"), Equals("czf"));}
+  It(test1){Assert::That(mixedNumber("5/4"), Equals("1 1/4"));}
+	It(test2){Assert::That(mixedNumber("6/4"), Equals("1 1/2"));}
+	It(test3){Assert::That(mixedNumber("8/4"), Equals("2"));}
+	It(test4){Assert::That(mixedNumber("4/6"), Equals("2/3"));}
+	It(test5){Assert::That(mixedNumber("-1/4"), Equals("-1/4"));}
+	It(test6){Assert::That(mixedNumber("-5/4"), Equals("-1 1/4"));}
+	It(test7){Assert::That(mixedNumber("-8/4"), Equals("-2"));}
+	It(test8){Assert::That(mixedNumber("0/32768"), Equals("0"));}
+	It(test9){Assert::That(mixedNumber("73/5"), Equals("14 3/5"));}
+	It(test10){Assert::That(mixedNumber("3855/889785"), Equals("257/59319"));}
+	It(test11){Assert::That(mixedNumber("82346/197"), Equals("418"));}
+	It(test12){Assert::That(mixedNumber("-2037450/204"), Equals("-9987 1/2"));}
 };
 
 */
@@ -876,66 +1273,43 @@ void tasks::task4_24()
 	std::cout << "Hello Task4_24!" << std::endl;
 }
 
-/* Task 4_25 -
+/* Task 4_25 - Chess Pieces
 
-Create a function to count the number of 1s in a 2D array.
+Create a function that takes the name of a chess piece, its position and a target position. The function should return true if the piece can move to the target and false if it can't.
+
+The possible inputs are "Pawn", "Knight", "Bishop", "Rook", "Queen" and "King".
 
 Examples
-count_ones([
-  [1, 0],
-  [0, 0]
-]) ➞ 1
+canMove("Rook", "A8", "H8") ➞ true
 
-count_ones([
-  [1, 1, 1],
-  [0, 0, 1],
-  [1, 1, 1]
-]) ➞ 7
+canMove("Bishop", "A7", "G1") ➞ true
 
-count_ones([
-  [1, 2, 3],
-  [0, 2, 1],
-  [5, 7, 33]
-]) ➞ 2
-
+canMove("Queen", "C4", "D6") ➞ false
 Notes
-N/A
+Do not include pawn capture moves and en passant.
+Do not include castling.
+Remember to include pawns' two-square move on the second rank!
+Look for patterns in the movement of the pieces.
 
-int count_ones(std::vector< std::vector<int> > matrix) {
+bool canMove(std::string piece, std::string current, std::string target) {
 
 }
 
-Describe(count_ones_tests)
+Describe(basic_tests)
 {
-	It(Test1){Assert::That(count_ones({
-		{1, 0, 1},
-		{0, 0, 0},
-		{0, 0, 1}
-	}), Equals(3));}
-	It(Test2){Assert::That(count_ones({
-		{1, 1, 1},
-		{0, 0, 1},
-		{1, 1, 1}
-	}), Equals(7));}
-	It(Test3){Assert::That(count_ones({
-		{1, 2, 3},
-		{0, 2, 1},
-		{5, 7, 33}
-	}), Equals(2));}
-	It(Test4){Assert::That(count_ones({
-		{5, 2, 3},
-		{0, 2, 5},
-		{5, 7, 33}
-	}), Equals(0));}
-	It(Test5){Assert::That(count_ones({
-		{1, 1},
-		{0, 1}
-	}), Equals(3));}
-	It(Test6){Assert::That(count_ones({
-		{5, 2},
-		{0, 2},
-		{5, 1}
-	}), Equals(1));}
+  It(test1){Assert::That(canMove("Pawn", "A5", "A6"), Equals(true));}
+	It(test2){Assert::That(canMove("Pawn", "G2", "G4"), Equals(true));}
+	It(test3){Assert::That(canMove("Pawn", "C6", "D7"), Equals(false));}
+	It(test4){Assert::That(canMove("Knight", "F5", "E3"), Equals(true));}
+	It(test5){Assert::That(canMove("Knight", "F6", "E5"), Equals(false));}
+	It(test6){Assert::That(canMove("Bishop", "B4", "E7"), Equals(true));}
+	It(test7){Assert::That(canMove("Bishop", "B6", "F5"), Equals(false));}
+	It(test8){Assert::That(canMove("Rook", "A8", "H8"), Equals(true));}
+	It(test9){Assert::That(canMove("Rook", "A8", "H7"), Equals(false));}
+	It(test10){Assert::That(canMove("Queen", "A8", "H1"), Equals(true));}
+	It(test11){Assert::That(canMove("Queen", "A6", "H4"), Equals(false));}
+	It(test12){Assert::That(canMove("King", "C4", "D5"), Equals(true));}
+	It(test13){Assert::That(canMove("King", "B7", "B5"), Equals(false));}
 };
 
 */
@@ -945,33 +1319,49 @@ void tasks::task4_25()
 	std::cout << "Hello Task4_25!" << std::endl;
 }
 
-/* Task 4_26 -
+/* Task 4_26 - Blood Types
 
-Create a function that takes a vector (array) of strings. Return all words in the vector (array) that are exactly four letters.
+When a person receives a blood transfusion, it is essential to make sure that the donor's blood type is compatible with the receiver's blood type. Receiving a blood type that is not compatible with your own can be life-threating, so blood banks always make sure to note the type of blood they receive from donors so that they can ensure a safe transfusion.
+
+Blood types are named according to three factors: presence of antigen A, presence of antigen B, and presence of Rh factor. If antigen A is found, the blood type includes the letter "A". If antigen B is found, the blood type includes the letter "B". And if the Rh factor is present, the blood type ends with "+"; otherwise, it ends with "-". If neither antigen A nor antigen B are found, the blood type includes the letter "O".
+
+For example, a person with only antigen A would have the blood type "A-". A person with both antigens A and B and the Rh factor would have blood type "AB+", and a person wih only the Rh factor would have blood type "O+".
+
+The rules for giving and receiving blood are as follows:
+
+A person with antigen A may only give blood to another person with antigen A.
+A person with antigen B may only give blood to another person with antigen B.
+A person with the Rh factor may only give blood to another person with the Rh factor.
+A person with none of the above factors (O-) can give blood to anyone.
+Write a function that takes in a donor's and receiver's blood types as strings and returns whether or not the donor can safely give blood to the receiver, according to the rules above.
 
 Examples
-isFourLetters(["Tomato", "Potato", "Pair"]) ➞ ["Pair"]
-isFourLetters(["Kangaroo", "Bear", "Fox"]) ➞ ["Bear"]
-isFourLetters(["Ryan", "Kieran", "Jason", "Matt"]) ➞ ["Ryan", "Matt"]
+canGiveBlood("O+", "A+") ➞ true
 
+canGiveBlood("A-", "B-") ➞ false
+
+canGiveBlood("A-", "AB+") ➞ true
 Notes
-You can expect valid strings for all test cases.
+All letters are capital.
+Each blood type will be one of the following strings: "O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-".
 
-std::vector<std::string> isFourLetters(std::vector<std::string> arr) {
+bool canGiveBlood(std::string donor, std::string receiver) {
 
 }
 
-Describe(is_four_letters)
-{
-  It(test1){Assert::That(isFourLetters({"Ryan", "Kieran", "Jason", "Matt"}), Equals(std::vector<std::string>({"Ryan", "Matt"})));}
-  It(test2){Assert::That(isFourLetters({"Tomato", "Potato", "Pair"}), Equals(std::vector<std::string>({"Pair"})));}
-  It(test3){Assert::That(isFourLetters({"Kangaroo", "Bear", "Fox"}), Equals(std::vector<std::string>({"Bear"})));}
-  It(test4){Assert::That(isFourLetters({"Red", "Blue", "Green", "Pink"}), Equals(std::vector<std::string>({"Blue", "Pink"})));}
-  It(test5){Assert::That(isFourLetters({"is", "up", "two", "elephant"}), Equals(std::vector<std::string>({})));}
-  It(test6){Assert::That(isFourLetters({"jazz", "quiz", "jump"}), Equals(std::vector<std::string>({"jazz", "quiz", "jump"})));}
-  It(test7){Assert::That(isFourLetters({"Broccoli", "Carrot", "Spinach"}), Equals(std::vector<std::string>({})));}
+Describe(canGiveBlood_){
+It(test1){Assert::That(canGiveBlood("O+", "A+"), Equals(true));}
+It(test2){Assert::That(canGiveBlood("A-", "B-"), Equals(false));}
+It(test3){Assert::That(canGiveBlood("A-", "AB+"), Equals(true));}
+It(test4){Assert::That(canGiveBlood("AB-", "B-"), Equals(false));}
+It(test5){Assert::That(canGiveBlood("AB+", "A+"), Equals(false));}
+It(test6){Assert::That(canGiveBlood("O-", "A-"), Equals(true));}
+It(test7){Assert::That(canGiveBlood("A-", "O-"), Equals(false));}
+It(test8){Assert::That(canGiveBlood("O+", "AB-"), Equals(false));}
+It(test9){Assert::That(canGiveBlood("O-", "AB+"), Equals(true));}
+It(test10){Assert::That(canGiveBlood("AB+", "AB+"), Equals(true));}
+It(test11){Assert::That(canGiveBlood("O+", "O-"), Equals(false));}
 };
-
 */
 
 void tasks::task4_26()
@@ -979,31 +1369,48 @@ void tasks::task4_26()
 	std::cout << "Hello Task4_26!" << std::endl;
 }
 
-/* Task 4_27 -
+/* Task 4_27 - Powerful Prime Factor
 
-Create a function that takes a string and returns true or false, depending on whether the characters are in order or not.
+Create a function that takes a positive integer and returns a string expressing how the number can be made by multiplying powers of its prime factors.
 
 Examples
-isInOrder("abc") ➞ true
-isInOrder("edabit") ➞ false
-isInOrder("123") ➞ true
-isInOrder("xyzz") ➞ true
+expressFactors(2) ➞ "2"
 
+expressFactors(4) ➞ "2^2"
+
+expressFactors(10) ➞ "2 x 5"
+
+expressFactors(60) ➞ "2^2 x 3 x 5"
 Notes
-You don't have to handle empty strings.
+All inputs will be positive integers in the range 1 < n < 10,000.
+If a factor is repeated express it in the form "x^y" where x is the factor and y is the number of repetitions of the factor.
+If n is a prime number, return n as a string as in example #1 above.
+Factors should appear in ascending order in the expression.
+Make sure you include the space either side of the multiplication sign, " x ".
+Check the Resources if you need to understand Prime Factorization.
 
-bool isInOrder(std::string str) {
+std::string expressFactors(int n) {
 
 }
 
-Describe(is_string_in_order)
-{
-  It(test1){Assert::That(isInOrder("abc"), Equals(true));}
-	It(test2){Assert::That(isInOrder("edabit"), Equals(false));}
-	It(test3){Assert::That(isInOrder("xyz"), Equals(true));}
-	It(test4){Assert::That(isInOrder("xyzz"), Equals(true));}
-	It(test5){Assert::That(isInOrder("123"), Equals(true));}
-	It(test6){Assert::That(isInOrder("321"), Equals(false));}
+Describe(expressFactors_) {
+	It(test1){Assert::That(expressFactors(2), Equals("2"));}
+	It(test2){Assert::That(expressFactors(4), Equals("2^2"));}
+	It(test3){Assert::That(expressFactors(10), Equals("2 x 5"));}
+	It(test4){Assert::That(expressFactors(11), Equals("11"));}
+	It(test5){Assert::That(expressFactors(29), Equals("29"));}
+	It(test6){Assert::That(expressFactors(60), Equals("2^2 x 3 x 5"));}
+	It(test7){Assert::That(expressFactors(100), Equals("2^2 x 5^2"));}
+	It(test8){Assert::That(expressFactors(151), Equals("151"));}
+	It(test9){Assert::That(expressFactors(323), Equals("17 x 19"));}
+	It(test10){Assert::That(expressFactors(997), Equals("997"));}
+	It(test11){Assert::That(expressFactors(3349), Equals("17 x 197"));}
+	It(test12){Assert::That(expressFactors(5040), Equals("2^4 x 3^2 x 5 x 7"));}
+	It(test13){Assert::That(expressFactors(6097), Equals("7 x 13 x 67"));}
+	It(test14){Assert::That(expressFactors(8192), Equals("2^13"));}
+	It(test15){Assert::That(expressFactors(9870), Equals("2 x 3 x 5 x 7 x 47"));}
+	It(test16){Assert::That(expressFactors(9973), Equals("9973"));}
+	It(test17){Assert::That(expressFactors(9999), Equals("3^2 x 11 x 101"));}
 };
 
 */
@@ -1013,43 +1420,31 @@ void tasks::task4_27()
 	std::cout << "Hello Task4_27!" << std::endl;
 }
 
-/* Task 4_28 -
+/* Task 4_28 - Topsy Turvy Numbers
 
-Create a function that takes a string, checks if it has the same number of x's and o's and returns either true or false.
+Topsy turvy numbers are numbers that when inverted (rotated 180 degrees) are unchanged. The most recent topsy turvy years were 1961 and 1881. The next one won't be until 6009. Mathemeticians have shown little interest in these numbers, but Edabitians are always up for a challenge:
 
-Return a boolean value (true or false).
-Return true if the amount of x's and o's are the same.
-Return false if they aren't the same amount.
-The string can contain any character.
-When "x" and "o" are not in the string, return true.
+Write a function that accepts two non-negative integers and returns an array of all topsy turvy numbers inclusively in that range.
 
 Examples
-XO("ooxx") ➞ true
-XO("xooxx") ➞ false
-XO("ooxXm") ➞ true // Case insensitive.
-XO("zpzpzpp") ➞ true // Returns true if no x and o.
-XO("zzoo") ➞ false
+topsyTurvy(0, 10) ➞ [0, 1, 8]
 
+topsyTurvy(10, 100) ➞ [11, 69, 88, 96]
+
+topsyTurvy(1000, 2000) ➞ [1001, 1111, 1691, 1881, 1961]
 Notes
-Remember to return true if there aren't any x's or o's.
-Must be case insensitive.
+N/A
 
-bool XO(std::string str) {
+std::vector<int> topsyTurvy(int lo, int hi) {
 
 }
 
-Describe(x_o)
-{
-  It(test1){Assert::That(XO("ooxx"), Equals(true));}
-  It(test2){Assert::That(XO("xooxx"), Equals(false));}
-  It(test3){Assert::That(XO("ooxXm"), Equals(true));}
-  It(test4){Assert::That(XO("zpzpzpp"), Equals(true));}
-  It(test5){Assert::That(XO("zzoo"), Equals(false));}
-  It(test6){Assert::That(XO("Xo"), Equals(true));}
-  It(test7){Assert::That(XO("x"), Equals(false));}
-  It(test8){Assert::That(XO("o"), Equals(false));}
-  It(test9){Assert::That(XO("xxxoo"), Equals(false));}
-  It(test10){Assert::That(XO(""), Equals(true));}
+Describe(topsyTurvy_){
+It(test1){Assert::That(topsyTurvy(0, 10), Equals(std::vector<int>{0, 1, 8}));}
+It(test2){Assert::That(topsyTurvy(11, 100), Equals(std::vector<int>{11, 69, 88, 96}));}
+It(test3){Assert::That(topsyTurvy(2000, 6000), Equals(std::vector<int>{}));}
+It(test4){Assert::That(topsyTurvy(1000, 2000), Equals(std::vector<int>{1001, 1111, 1691, 1881, 1961}));}
+It(test5){Assert::That(topsyTurvy(10000, 15000), Equals(std::vector<int>{10001, 10101, 10801, 11011, 11111, 11811}));}
 };
 
 */
@@ -1059,28 +1454,30 @@ void tasks::task4_28()
 	std::cout << "Hello Task4_28!" << std::endl;
 }
 
-/* Task 4_29 -
+/* Task 4_29 - Advanced Array Sort
 
-Given an array, return true if there are more odd numbers than even numbers, otherwise return false.
+Create a function that takes in an array of numbers and returns an array with the items from the original array stored in subarrays. Items of the same value should be in the same subarray.
 
 Examples
-oddeven([1, 2, 3, 4, 5, 6, 7, 8, 9]) ➞ true
-oddeven([1]) ➞ true
-oddeven([13452394823795273847528572346]) ➞ false
+advancedSort([2, 1, 2, 1]) ➞ [[2, 2], [1, 1]]
 
+advancedSort([5, 4, 5, 5, 4, 3]) ➞ [[5, 5, 5], [4, 4], [3]]
+
+advancedSort([3,2,1,3,2,1]) ➞ [[3,3],[2,2],[1,1]]
 Notes
-All arrays will have at least 1 item.
+The subarrays should be returned in the order of each element's first appearance in the given array.
 
-bool oddeven(std::vector<int> arr) {
+std::vector<std::vector<int>> advancedSort(std::vector<int> arr) {
 
 }
 
-Describe(oddeven_) {
-	It(test1){Assert::That(oddeven({1, 2, 3, 4, 5, 6, 7, 8, 9}), Equals(true));}
-	It(test2){Assert::That(oddeven({1}), Equals(true));}
-	It(test3){Assert::That(oddeven({1, 2, 3, 4, 5, 6, 7, 9}), Equals(true));}
-	It(test4){Assert::That(oddeven({42, 1, 66}), Equals(false));}
-	It(test5){Assert::That(oddeven({2, 3, 4, 5, 6, 7, 8}), Equals(false));}
+Describe(advancedSort_){
+It(test1){Assert::That(advancedSort({1,2,1,2}) , Equals(std::vector<std::vector<int>>{{1,1},{2,2}}));}
+It(test2){Assert::That(advancedSort({2,1,2,1}) , Equals(std::vector<std::vector<int>>{{2,2},{1,1}}));}
+It(test3){Assert::That(advancedSort({3,2,1,3,2,1}) , Equals(std::vector<std::vector<int>>{{3,3},{2,2},{1,1}}));}
+It(test4){Assert::That(advancedSort({5,5,4,3,4,4}) , Equals(std::vector<std::vector<int>>{{5,5},{4,4,4},{3}}));}
+It(test5){Assert::That(advancedSort({80,80,4,60,60,3}),Equals(std::vector<std::vector<int>>{{80,80},{4},{60,60},{3}}));}
+It(test6){Assert::That(advancedSort({1234, 1235, 1234, 1235, 1236, 1235}),Equals(std::vector<std::vector<int>>{{1234, 1234},{1235, 1235, 1235},{1236}}));}
 };
 
 */
@@ -1090,99 +1487,34 @@ void tasks::task4_29()
 	std::cout << "Hello Task4_29!" << std::endl;
 }
 
-/* Task 4_30 -
+/* Task 4_30 - Number Pairs
 
-Suppose an image can be represented as a 2D array of 0s and 1s. Write a function to reverse an image. Replace the 0s with 1s and vice versa.
+Create a function that determines how many number pairs are embedded in a space-separated string. The first numeric value in the space-separated string represents the count of the numbers, thus, excluded in the pairings.
 
 Examples
-reverseImage([
-  [1, 0, 0],
-  [0, 1, 0],
-  [0, 0, 1]
-]) ➞ [
-  [0, 1, 1],
-  [1, 0, 1],
-  [1, 1, 0]
-]
+numberPairs("7 1 2 1 2 1 3 2") ➞ 2
+// (1, 1), (2, 2)
 
-reverseImage([
-  [1, 1, 1],
-  [0, 0, 0]
-]) ➞ [
-  [0, 0, 0],
-  [1, 1, 1]
-]
+numberPairs("9 10 20 20 10 10 30 50 10 20") ➞ 3
+// (10, 10), (20, 20), (10, 10)
 
-reverseImage([
-  [1, 0, 0],
-  [1, 0, 0]
-]) ➞ [
-  [0, 1, 1],
-  [0, 1, 1]
-]
-
+numberPairs("4 2 3 4 1") ➞ 0
+// Although two 4's are present, the first one is discounted.
 Notes
-N/A
+Always take into consideration the first number in the string is not part of the pairing, thus, the count. It may not seem so useful as most people see it, but it's mathematically significant if you deal with set operations.
 
-std::vector<std::vector<int>> reverseImage(std::vector<std::vector<int>> image) {
+int numberPairs(std::string str){
 
 }
 
-Describe(reverse_image)
-{
-	It(Test1){Assert::That(reverseImage({
-		{1, 0, 0},
-		{0, 1, 0},
-		{0, 0, 1}
-	}), Equals(std::vector<std::vector<int>>({
-		{0, 1, 1},
-		{1, 0, 1},
-		{1, 1, 0}
-	})));}
-
-	It(Test2){Assert::That(reverseImage({
-		{1, 0, 0},
-		{0, 0, 0}
-	}), Equals(std::vector<std::vector<int>>({
-		{0, 1, 1},
-		{1, 1, 1}
-	})));}
-
-	It(Test3){Assert::That(reverseImage({
-		{1, 0, 0},
-		{1, 0, 0}
-	}), Equals(std::vector<std::vector<int>>({
-		{0, 1, 1},
-		{0, 1, 1}
-	})));}
-
-	It(Test4){Assert::That(reverseImage({
-		{1, 0, 0, 0, 0},
-		{1, 0, 0, 1, 1},
-		{1, 1, 1, 1, 1},
-		{1, 1, 1, 1, 0},
-		{1, 1, 1, 0, 0}
-	}), Equals(std::vector<std::vector<int>>({
-		{0, 1, 1, 1, 1},
-		{0, 1, 1, 0, 0},
-		{0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 1},
-		{0, 0, 0, 1, 1}
-	})));}
-
-	It(Test5){Assert::That(reverseImage({
-		{1, 1},
-		{1, 0},
-		{1, 1},
-		{1, 1},
-		{1, 1}
-	}), Equals(std::vector<std::vector<int>>({
-		{0, 0},
-		{0, 1},
-		{0, 0},
-		{0, 0},
-		{0, 0}
-	})));}
+Describe(numberPairs_){
+It(test1){Assert::That(numberPairs("7 1 2 1 2 1 3 2"), Equals(2)  );}
+It(test2){Assert::That(numberPairs("9 10 20 20 10 10 30 50 10 20"), Equals(3));}
+It(test3){Assert::That(numberPairs("4 2 3 4 1"), Equals(0));}
+It(test4){Assert::That(numberPairs("13 10 20 20 10 10 30 50 10 20 50 50 30 20"), Equals(6));}
+It(test5){Assert::That(numberPairs("10 1 2 5 6 5 2 1 7 8 1"), Equals(3));}
+It(test6){Assert::That(numberPairs("16 2 3 5 11 1 11 5 7 9 13 17 3 8 7 2 1"), Equals(6));}
+It(test7){Assert::That(numberPairs("6 1 2 2 4 3 4"), Equals(2));}
 };
 
 */
@@ -1192,52 +1524,7 @@ void tasks::task4_30()
 	std::cout << "Hello Task4_30!" << std::endl;
 }
 
-/* Task 4_31 -
-
-Welcome to the beginning of this collection on Computer Science Algorithms. Admittedly there are other challenges on Edabit that deal with recursion and algorithmic processes, but these particular challenges are designed to give examples and to educate users on the topics being covered.
-
-Recursion
-In computer science, "recursion" is the act of writing a function that calls itself from within its own code. The function below better helps explain and illustrate recursion by simply counting down from a given number to zero:
-
-void factorial(int num) {
-  int targetNumber = 0;
-
-  if (num == targetNumber)
-	{cout << "Countdown complete!";}
-  else
-	{factorial(num - 1);}
-}
-
-Explanation
-The above function starts by initializing the target number, which is zero, then it creates a base case by checking if the inputted number has reached the target number yet. If it has, then the function ends and it prints the statement, else the function inputs num subtracted by one and then runs the function again.
-When using recursive functions a "Base Case" is needed. A base case will stop the function once it reaches its intended goal. In the absence of a base case, the program can either crash due to "Stack Overflow" or by initiating an "Infinite Loop."
-On a side note, initializing variables in recursive functions can sometimes be problematic because when the function runs again it will reset the value of that variable. For this specific recursive function the variable works fine because the target number we're trying to reach is consistently zero.
-
-Instructions
-The recursive function for this challenge should return the factorial of an inputted integer. If anyone needs a refresher, factorials in mathematics are represented by an exclamation point placed to the right of a number: 4! = 4 x 3 x 2 x 1 = 24
-
-Examples
-factorial(5) ➞ 120
-factorial(3) ➞ 6
-factorial(2) ➞ 2
-
-Notes
-Puts statements can be added to the Countdown function example for illustrative purposes if need be.
-Terms that are placed in italics ("example"), while not always necessary to completing the challenge, can be helpful or just generally good to know as an aspiring programmer or computer science student/enthusiast.
-Several of the challenges that will be covered in this collection on algorithms can be solved non-recursively and without implementing the algorithms described in each challenge. I implore anyone solving these challenges to do them as intended. Not understanding the concepts taught will be an obstacle to later challenges and won't aid anyone in advancing their skills as a programmer.
-If you are stuck please check the Resources tab, Comments tab, or if you're really stuck, use the Solutions tab to unlock the answers.
-
-int factorial(int num) {
-
-}
-
-Describe(math_factorial)
-{
-  It(test1){Assert::That(factorial(7), Equals(5040));}
-  It(test2){Assert::That(factorial(1), Equals(1));}
-  It(test3){Assert::That(factorial(9), Equals(362880));}
-	It(test4){Assert::That(factorial(2), Equals(2));}
-};
+/* Task 4_31 - Find All Prime Numbers in Decimal Integer https://edabit.com/challenge/RKwaq5pQzxsqmSwpS
 
 */
 
@@ -1246,99 +1533,7 @@ void tasks::task4_31()
 	std::cout << "Hello Task4_31!" << std::endl;
 }
 
-/* Task 4_32 -
-
-Your task is to create a Circle constructor that creates a circle with a radius provided by an argument. The circles constructed must have two getters getArea() (PIr^2) and getPerimeter() (2PI*r) which give both respective areas and perimeter (circumference).
-For help with this class, I have provided you with a Rectangle constructor which you can use as a base example.
-
-Examples
-Circle circy(11);
-circy.getArea();
-
-// Should return 379.94
-
-Circle circy(4.44);
-circy.getPerimeter();
-
-// Should return 27.8832
-
-Notes
-Don't worry about floating point precision - I've factored in the chance that your answer may be more or less accurate than mine. This is more of a tutorial than a challenge so the topic covered may be considered advanced, yet the challenge is more simple - so if this challenge gets labelled as easy, don't worry too much.
-
-
-#include <math.h>
-
-class Rectangle {
-	public:
-	Rectangle(float theSideA, float theSideB){
-	  sideA = theSideA;
-	  sideB = theSideB;
-	}
-	float getArea() { return sideA * sideB; };
-	float getPerimeter() { return (sideA + sideB) * 2; };
-  private:
-	float sideA;
-	float sideB;
-};
-
-const float PI_F = 3.14f;
-
-class Circle {
-  // Write your code here
-  // Please use PI_F constant
-}
-
-
-#include <math.h>
-
-//const float PI_F = 3.14f;
-
-float customRound(float number) {
-  float factor = pow(10, 5);
-  return round(number * factor) / factor;
-};
-
-Describe(circo_geometry)
-{
-  It(test1) {
-	Circle circo(2);
-	Assert::That((int)(customRound(circo.getArea()) * 100), Equals((int)(12.56f * 100)));
-  }
-  It(test2) {
-	Circle circo(2);
-	Assert::That((int)(customRound(circo.getPerimeter()) * 100), Equals((int)(12.56f * 100)));
-  }
-  It(test3) {
-	Circle circo(20);
-	Assert::That((int)(customRound(circo.getArea()) * 10), Equals((int)(1256.0f * 10)));
-  }
-  It(test4) {
-	Circle circo(20);
-	Assert::That((int)(customRound(circo.getPerimeter()) * 10), Equals((int)(125.6f * 10)));
-  }
-  It(test5) {
-	Circle circo(4.4);
-	Assert::That((int)(customRound(circo.getArea()) * 10000), Equals((int)(60.7904f * 10000)));
-  }
-  It(test6) {
-	Circle circo(4.4);
-	Assert::That((int)(customRound(circo.getPerimeter()) * 1000), Equals((int)(27.632f * 1000)));
-  }
-
-  //scroll down for spoilers that are hard to use
-
-  It(test7) {
-	int randomInt = rand() % 100 + 1; // random number between 1 and 100
-	Circle circo(randomInt);
-	Assert::That((int)(customRound(circo.getArea()) * 1000000), Equals((int)(PI_F * pow(randomInt, 2) * 1000000)));
-  }
-  It(test8) {
-	int randomInt = rand() % 100 + 1; // random number between 1 and 100
-	Circle circo(randomInt);
-	Assert::That((int)(customRound(circo.getPerimeter()) * 100000), Equals((int)(2 * PI_F * randomInt * 100000)));
-  }
-
-};
+/* Task 4_32 - Sum Quadratic Roots https://edabit.com/challenge/mW5GXqQLQJRdtyxRn
 
 */
 
@@ -1347,34 +1542,7 @@ void tasks::task4_32()
 	std::cout << "Hello Task4_32!" << std::endl;
 }
 
-/* Task 4_33 -
-
-An array is special if every even index contains an even number and every odd index contains an odd number. Create a function that returns true if an array is special, and false otherwise.
-
-Examples
-isSpecialArray([2, 7, 4, 9, 6, 1, 6, 3]) ➞ true // Even indices: [2, 4, 6, 6]; Odd indices: [7, 9, 1, 3]
-isSpecialArray([2, 7, 9, 1, 6, 1, 6, 3]) ➞ false // Index 2 has an odd number 9.
-isSpecialArray([2, 7, 8, 8, 6, 1, 6, 3]) ➞ false // Index 3 has an even number 8.
-
-Notes
-N/A
-
-bool isSpecialArray(std::vector<int> arr) {
-
-}
-
-Describe(is_special_array)
-{
-  It(test1){Assert::That(isSpecialArray({2, 7, 4, 9, 6, 1, 6, 3}), Equals(true));}
-	It(test2){Assert::That(isSpecialArray({2, 7, 9, 9, 6, 1, 6, 3}), Equals(false));}
-	It(test3){Assert::That(isSpecialArray({2, 7, 8, 8, 6, 1, 6, 3}), Equals(false));}
-	It(test4){Assert::That(isSpecialArray({1, 1, 1, 2}), Equals(false));}
-	It(test5){Assert::That(isSpecialArray({2, 2, 2, 2}), Equals(false));}
-	It(test6){Assert::That(isSpecialArray({2, 1, 2, 1}), Equals(true));}
-	It(test7){Assert::That(isSpecialArray({4, 5, 6, 7}), Equals(true));}
-	It(test8){Assert::That(isSpecialArray({4, 5, 6, 7, 0, 5}), Equals(true));}
-	It(test9){Assert::That(isSpecialArray({0, 1, 0, 1}), Equals(true));}
-};
+/* Task 4_33 - Sales Season https://edabit.com/challenge/86HN9qLoDgk3dEjcB
 
 */
 
@@ -1383,37 +1551,7 @@ void tasks::task4_33()
 	std::cout << "Hello Task4_33!" << std::endl;
 }
 
-/* Task 4_34 -
-
-Create a function that takes an array of numbers and returns an array where each number is the sum of itself + all previous numbers in the array.
-
-Examples
-cumulativeSum([1, 2, 3]) ➞ [1, 3, 6]
-cumulativeSum([1, -2, 3]) ➞ [1, -1, 2]
-cumulativeSum([3, 3, -2, 408, 3, 3]) ➞ [3, 6, 4, 412, 415, 418]
-
-Notes
-Return an empty array if the input is an empty array.
-
-std::vector<int> cumulativeSum(std::vector<int> array) {
-
-}
-
-Describe(cumulative_sum)
-{
-	// Should return an empty array if given an empty array
-  It(test1){Assert::That(cumulativeSum({}), Equals(std::vector<int>({})));}
-  // Should work with 1 value
-	It(test2){Assert::That(cumulativeSum({1}), Equals(std::vector<int>({1})));}
-  // Should work with multiple values
-	It(test3){Assert::That(cumulativeSum({1, 2, 3}), Equals(std::vector<int>({1, 3, 6})));}
-  // Should work with multiple negative values
-	It(test4){Assert::That(cumulativeSum({-1, -2, -3}), Equals(std::vector<int>({-1, -3, -6})));}
-  // Should work with multiple positive and negative values
-	It(test5){Assert::That(cumulativeSum({1, -2, 3}), Equals(std::vector<int>({1, -1, 2})));}
-  // Should work with long array
-	It(test6){Assert::That(cumulativeSum({3, 3, -2, 408, 3, 3, 0, 66, 2, -2, 2, 3, 4, 2, -47, 3, 3, 2}), Equals(std::vector<int>({3, 6, 4, 412, 415, 418, 418, 484, 486, 484, 486, 489, 493, 495, 448, 451, 454, 456})));}
-};
+/* Task 4_34 - Vowel Families https://edabit.com/challenge/HKycFr7KLARLebHBF
 
 */
 
@@ -1422,58 +1560,7 @@ void tasks::task4_34()
 	std::cout << "Hello Task4_34!" << std::endl;
 }
 
-/* Task 4_35 -
-
-Given a number between 1-26, return what letter is at that position in the alphabet. Return 0 if the number given is not within that range, or isn't an integer.
-
-Examples
-letterAtPosition(1) ➞ "a"
-letterAtPosition(26.0) ➞ "z"
-letterAtPosition(0) ➞ "0"
-letterAtPosition(4.5) ➞ "0"
-
-Notes
-Return a lowercase letter.
-Numbers that end with ".0" are valid.
-
-#include <cmath>
-char letterAtPosition(float n) {
-
-}
-
-Describe(letterAtPosition_){
-It(test1){Assert::That(letterAtPosition(1), Equals('a'));}
-It(test2){Assert::That(letterAtPosition(2), Equals('b'));}
-It(test3){Assert::That(letterAtPosition(3), Equals('c'));}
-It(test4){Assert::That(letterAtPosition(4), Equals('d'));}
-It(test5){Assert::That(letterAtPosition(5), Equals('e'));}
-It(test6){Assert::That(letterAtPosition(6), Equals('f'));}
-It(test7){Assert::That(letterAtPosition(7), Equals('g'));}
-It(test8){Assert::That(letterAtPosition(8), Equals('h'));}
-It(test9){Assert::That(letterAtPosition(9), Equals('i'));}
-It(test10){Assert::That(letterAtPosition(10), Equals('j'));}
-It(test11){Assert::That(letterAtPosition(11), Equals('k'));}
-It(test12){Assert::That(letterAtPosition(12), Equals('l'));}
-It(test13){Assert::That(letterAtPosition(13), Equals('m'));}
-It(test14){Assert::That(letterAtPosition(14), Equals('n'));}
-It(test15){Assert::That(letterAtPosition(15), Equals('o'));}
-It(test16){Assert::That(letterAtPosition(16), Equals('p'));}
-It(test17){Assert::That(letterAtPosition(17), Equals('q'));}
-It(test18){Assert::That(letterAtPosition(18), Equals('r'));}
-It(test19){Assert::That(letterAtPosition(19), Equals('s'));}
-It(test20){Assert::That(letterAtPosition(20), Equals('t'));}
-It(test21){Assert::That(letterAtPosition(21), Equals('u'));}
-It(test22){Assert::That(letterAtPosition(22), Equals('v'));}
-It(test23){Assert::That(letterAtPosition(23), Equals('w'));}
-It(test24){Assert::That(letterAtPosition(24), Equals('x'));}
-It(test25){Assert::That(letterAtPosition(25), Equals('y'));}
-It(test26){Assert::That(letterAtPosition(26), Equals('z'));}
-It(test27){Assert::That(letterAtPosition(0), Equals('0'));}
-It(test28){Assert::That(letterAtPosition(4.5), Equals('0'));}
-It(test29){Assert::That(letterAtPosition(4.0), Equals('d'));}
-It(test30){Assert::That(letterAtPosition(1.0), Equals('a'));}
-It(test31){Assert::That(letterAtPosition(26.0), Equals('z'));}
-};
+/* Task 4_35 - Alphabet Clash (Battle of the ASCII Values) https://edabit.com/challenge/XccJ395ab4DZYGZW9
 
 */
 
@@ -1482,50 +1569,8 @@ void tasks::task4_35()
 	std::cout << "Hello Task4_35!" << std::endl;
 }
 
-/* Task 4_36 -
+/* Task 4_36 - Parentheses Clusters https://edabit.com/challenge/f5RmXpK54SGQ8w8tz
 
-Create a function that returns true if two arrays contain identical values, and false otherwise.
-To solve this question, your friend writes the following code:
-bool checkEquals(std::vector<int> arr1, std::vector<int> arr2) {
-	for (i=0; i<arr1; i++)
-	{
-	if (arr1[i]==arr2[i]){return true;}
-	}
-  return false;
-}
-
-But testing the code, you see that something is not quite right. Running the code yields the following results:
-checkEquals([1, 2], [1, 3]) ➞ false // Good so far...
-checkEquals([1, 2], [1, 2]) ➞ false // Yikes! What happened?
-
-Rewrite your friend's code so that it correctly checks if two arrays are equal. The tests below should pass:
-
-Examples
-checkEquals([1, 2], [1, 3]) ➞ false
-checkEquals([1, 2], [1, 2]) ➞ true
-checkEquals([4, 5, 6], [4, 5, 6]) ➞ true
-checkEquals([4, 7, 6], [4, 5, 6]) ➞ false
-
-Notes
-N/A
-
-// Fix this broken code!
-bool checkEquals(std::vector<int> arr1, std::vector<int> arr2) {
-	  for (i=0; i<arr1; i++)
-	  {
-		if (arr1[i]==arr2[i]){return true;}
-	  }
-  return false;
-}
-
-//Original Copied from Helen Yu (javascript)
-
-Describe(checkEquals_){
-It(test1){Assert::That(checkEquals({1, 2}, {1, 3}), Equals(false));}
-It(test2){Assert::That(checkEquals({1, 2}, {1, 2}), Equals(true));}
-It(test3){Assert::That(checkEquals({4, 5, 6}, {4, 5, 6}), Equals(true));}
-It(test4){Assert::That(checkEquals({4, 7, 6}, {4, 5, 6}), Equals(false));}
-};
 */
 
 void tasks::task4_36()
@@ -1533,31 +1578,7 @@ void tasks::task4_36()
 	std::cout << "Hello Task4_36!" << std::endl;
 }
 
-/* Task 4_37 -
-
-Create a function that takes an array of numbers between 1 and 10 (excluding one number) and returns the missing number.
-
-Examples
-missingNum([1, 2, 3, 4, 6, 7, 8, 9, 10]) ➞ 5
-missingNum([7, 2, 3, 6, 5, 9, 1, 4, 8]) ➞ 10
-missingNum([10, 5, 1, 2, 4, 6, 8, 3, 9]) ➞ 7
-
-Notes
-The array of numbers will be unsorted (not in order).
-Only one number will be missing.
-
-int missingNum(std::vector<int> arr) {
-
-}
-
-Describe(missing_nums)
-{
-  It(test1){Assert::That(missingNum({1, 2, 3, 4, 6, 7, 8, 9, 10}), Equals(5));}
-  It(test2){Assert::That(missingNum({7, 2, 3, 6, 5, 9, 1, 4, 8}), Equals(10));}
-  It(test3){Assert::That(missingNum({7, 2, 3, 9, 4, 5, 6, 8, 10}), Equals(1));}
-  It(test4){Assert::That(missingNum({10, 5, 1, 2, 4, 6, 8, 3, 9}), Equals(7));}
-  It(test5){Assert::That(missingNum({1, 7, 2, 4, 8, 10, 5, 6, 9}), Equals(3));}
-};
+/* Task 4_37 - Read the Abacus (Part 2: Japanese Soroban) https://edabit.com/challenge/oyueonWr7h4S24nwm
 
 */
 
@@ -1566,41 +1587,7 @@ void tasks::task4_37()
 	std::cout << "Hello Task4_37!" << std::endl;
 }
 
-/* Task 4_38 -
-
-A palindrome is a word that is identical forward and backwards.
-
-mom
-racecar
-kayak
-Given a word, create a function that checks whether it is a palindrome.
-
-Examples
-checkPalindrome("mom") ➞ true
-checkPalindrome("scary") ➞ false
-checkPalindrome("reviver") ➞ true
-checkPalindrome("stressed") ➞ false
-
-Notes
-All test input is lower cased.
-
-
-bool checkPalindrome(std::string str) {
-
-}
-
-Describe(check_palindrome)
-{
-	It(test1){Assert::That(checkPalindrome("mom"), Equals(true));}
-	It(test2){Assert::That(checkPalindrome("scary"), Equals(false));}
-	It(test3){Assert::That(checkPalindrome("reviver"), Equals(true));}
-	It(test4){Assert::That(checkPalindrome("stressed"), Equals(false));}
-	It(test5){Assert::That(checkPalindrome("good"), Equals(false));}
-	It(test6){Assert::That(checkPalindrome("refer"), Equals(true));}
-	It(test7){Assert::That(checkPalindrome("something"), Equals(false));}
-	It(test8){Assert::That(checkPalindrome("redder"), Equals(true));}
-	It(test9){Assert::That(checkPalindrome("civic"), Equals(true));}
-};
+/* Task 4_38 - One Small Favor https://edabit.com/challenge/2qxrxEfTsfQN9H6LB
 
 */
 
@@ -1609,39 +1596,7 @@ void tasks::task4_38()
 	std::cout << "Hello Task4_38!" << std::endl;
 }
 
-/* Task 4_39 -
-
-Fibonacci numbers are created in the following way:
-
-F(0) = 0
-F(1) = 1
-...
-F(n) = F(n-2) + F(n-1)
-Write a function that calculates the nth Fibonacci number.
-
-Examples
-fib(0) ➞ 0
-fib(1) ➞ 1
-fib(2) ➞ 1
-fib(8) ➞ 21
-
-Notes
-N/A
-
-
-int fib(int n) {
-
-}
-
-Describe(fibonacci_numbers)
-{
-  It(test1){Assert::That(fib(2), Equals(1));}
-	It(test2){Assert::That(fib(5), Equals(5));}
-	It(test3){Assert::That(fib(8), Equals(21));}
-	It(test4){Assert::That(fib(12), Equals(144));}
-	It(test5){Assert::That(fib(0), Equals(0));}
-	It(test6){Assert::That(fib(1), Equals(1));}
-};
+/* Task 4_39 - The Shortest Path https://edabit.com/challenge/aauDZGSNL3TMus9N9
 
 */
 
@@ -1650,35 +1605,7 @@ void tasks::task4_39()
 	std::cout << "Hello Task4_39!" << std::endl;
 }
 
-/* Task 4_40 -
-
-Write a function that takes a two-digit number and determines if it's the largest of two possible digit swaps.
-
-To illustrate:
-largestSwap(27) ➞ false
-largestSwap(43) ➞ true
-If 27 is our input, we should return false because swapping the digits gives us 72, and 72 > 27. On the other hand, swapping 43 gives us 34, and 43 > 34.
-
-Examples
-largestSwap(14) ➞ false
-largestSwap(53) ➞ true
-largestSwap(99) ➞ true
-
-Notes
-Numbers with two identical digits (third example) should yield true (you can't do better).
-
-bool largestSwap(int num) {
-
-}
-
-Describe(largest_swap)
-{
-	It(T1){Assert::That(largestSwap(27), Equals(false));}
-	It(T2){Assert::That(largestSwap(43), Equals(true));}
-	It(T3){Assert::That(largestSwap(14), Equals(false));}
-	It(T4){Assert::That(largestSwap(53), Equals(true));}
-	It(T5){Assert::That(largestSwap(99), Equals(true));}
-};
+/* Task 4_40 - Keyword Cipher https://edabit.com/challenge/SRF9qZNCheaEnSnBt
 
 */
 
@@ -1687,61 +1614,7 @@ void tasks::task4_40()
 	std::cout << "Hello Task4_40!" << std::endl;
 }
 
-/* Task 4_41 -
-
-Create a function that returns the sum of all even elements in a 2D matrix.
-
-Examples
-sumOfEvens([
-  [1, 0, 2],
-  [5, 5, 7],
-  [9, 4, 3]
-]) ➞ 6
-// 2 + 4 = 6
-
-sumOfEvens([
-  [1, 1],
-  [1, 1]
-]) ➞ 0
-
-sumOfEvens([
-  [42, 9],
-  [16, 8]
-]) ➞ 66
-Notes
-N/A
-
-int sumOfEvens(std::vector<std::vector<int>> arr) {
-
-}
-
-Describe(sum_of_all_evens)
-{
-	It(T1){Assert::That(sumOfEvens({
-		{1, 5, 1, 3},
-		{4, 1, 2, 0},
-		{6, 9, 7, 4},
-		{5, 1, 2, 6}
-	}), Equals(24));}
-
-	It(T2){Assert::That(sumOfEvens({
-		{1, 0, 1},
-		{33, 1, 2},
-		{15, 9, 1},
-		{5, 1, 979}
-	}), Equals(2));}
-
-	It(T3){Assert::That(sumOfEvens({
-		{2, 19, 5, 43},
-		{67, 2, 0, 12}
-	}), Equals(16));}
-
-	It(T4){Assert::That(sumOfEvens({
-		{1, 3, 7, 9},
-		{11, 13, 15, 17},
-		{19, 21, 23, 25}
-	}), Equals(0));}
-};
+/* Task 4_41 - Extracting Words with "-ing" Inflection https://edabit.com/challenge/9qKMWGWJumQ5STNtE
 
 */
 
@@ -1750,33 +1623,7 @@ void tasks::task4_41()
 	std::cout << "Hello Task4_41!" << std::endl;
 }
 
-/* Task 4_42 -
-
-Create a function that takes an array as an argument and returns true or false depending on whether the average of all elements in the array is a whole number or not.
-
-Examples
-isAvgWhole([1, 3]) ➞ true
-isAvgWhole([1, 2, 3, 4]) ➞ false
-isAvgWhole([1, 5, 6]) ➞ true
-isAvgWhole([1, 1, 1]) ➞ true
-isAvgWhole([9, 2, 2, 5]) ➞ false
-
-Notes
-N/A
-
-bool isAvgWhole(std::vector<int> arr) {
-
-}
-
-Describe(is_the_avg_whole_tests)
-{
-	It(whole_averages_should_return_true_1){Assert::That(isAvgWhole({1, 1, 1, 1}), Equals(true));}
-	It(whole_averages_should_return_true_2){Assert::That(isAvgWhole({1, 2, 3, 4, 5}), Equals(true));}
-	It(not_whole_averages_should_return_false_1){Assert::That(isAvgWhole({3, 5, 9}), Equals(false));}
-	It(not_whole_averages_should_return_false_2){Assert::That(isAvgWhole({5, 2, 4}), Equals(false));}
-	It(not_whole_averages_should_return_false_3){Assert::That(isAvgWhole({11, 22}), Equals(false));}
-	It(not_whole_averages_should_return_false_4){Assert::That(isAvgWhole({4, 1, 7, 9, 2, 5, 7, 2, 4}), Equals(false));}
-};
+/* Task 4_42 - Give Me a Hint https://edabit.com/challenge/7Z6yrQHNp3Tm3Y2xY
 
 */
 
@@ -1785,30 +1632,7 @@ void tasks::task4_42()
 	std::cout << "Hello Task4_42!" << std::endl;
 }
 
-/* Task 4_43 -
-
-Create a function that takes a number a and finds the missing exponent x so that a when raised to the power of x is equal to b.
-
-Examples
-solveForExp(4, 1024) ➞ 5
-solveForExp(2, 1024) ➞ 10
-solveForExp(9, 3486784401) ➞ 10
-
-Notes
-a is raised to the power of what in order to equal b?
-
-int solveForExp(int a, int b) {
-
-}
-
-Describe(tests)
-{
-  It(test1){Assert::That(solveForExp(4, 1024), Equals(5));}
-	It(test2){Assert::That(solveForExp(2, 1024), Equals(10));}
-	It(test3){Assert::That(solveForExp(8, 134217728), Equals(9));}
-	It(test4){Assert::That(solveForExp(19, 47045881), Equals(6));}
-	It(test5){Assert::That(solveForExp(10, 100000000), Equals(8));}
-};
+/* Task 4_43 - Phone Letter Combinations https://edabit.com/challenge/Kekh6Jf8gKzD4abWk
 
 */
 
@@ -1817,37 +1641,7 @@ void tasks::task4_43()
 	std::cout << "Hello Task4_43!" << std::endl;
 }
 
-/* Task 4_44 -
-
-Write a function that takes three string arguments (first, last, and word) and returns true if word is found between first and last in the dictionary, otherwise false.
-
-Examples
-isBetween("apple", "banana", "azure") ➞ true
-isBetween("monk", "monument", "monkey") ➞ true
-isBetween("bookend", "boolean", "boost") ➞ false
-
-Notes
-All letters will be in lowercase.
-All three words will be different.
-Remember that the string word is in the middle.
-
-bool isBetween(std::string first, std::string last, std::string word) {
-
-}
-
-Describe(between_words)
-{
-  It(test1){Assert::That(isBetween("apple", "banana", "azure"), Equals(true));}
-	It(test2){Assert::That(isBetween("bookcase", "zebra", "squid"), Equals(true));}
-	It(test3){Assert::That(isBetween("shrapnel", "tapenade", "tally"), Equals(true));}
-	It(test4){Assert::That(isBetween("monk", "monument", "monkey"), Equals(true));}
-	It(test5){Assert::That(isBetween("oath", "ostrich", "osteoporosis"), Equals(true));}
-	It(test6){Assert::That(isBetween("ostracize", "ostrich", "open"), Equals(false));}
-	It(test7){Assert::That(isBetween("bookend", "boolean", "boost"), Equals(false));}
-	It(test8){Assert::That(isBetween("tamer", "tanner", "timid"), Equals(false));}
-	It(test9){Assert::That(isBetween("rhino", "sorcerer", "quote"), Equals(false));}
-	It(test10){Assert::That(isBetween("body", "lung", "ace"), Equals(false));}
-};
+/* Task 4_44 - Seven Segment Display https://edabit.com/challenge/CZato3JYzYTZh7Y74
 
 */
 
@@ -1856,50 +1650,7 @@ void tasks::task4_44()
 	std::cout << "Hello Task4_44!" << std::endl;
 }
 
-/* Task 4_45 -
-
-Your job is to create a function, that takes 3 numbers: a, b, c and returns true if the last digit of a * b = the last digit of c. Check the examples below for an explanation.
-
-Examples
-lastDig(25, 21, 125) ➞ true
-// The last digit of 25 is 5, the last digit of 21 is 1, and the last
-// digit of 125 is 5, and the last digit of 5*1 = 5, which is equal
-// to the last digit of 125(5).
-
-lastDig(55, 226, 5190) ➞ true
-// The last digit of 55 is 5, the last digit of 226 is 6, and the last
-// digit of 5190 is 0, and the last digit of 5*6 = 30 is 0, which is
-// equal to the last digit of 5190(0).
-
-lastDig(12, 215, 2142) ➞ false
-// The last digit of 12 is 2, the last digit of 215 is 5, and the last
-// digit of 2142 is 2, and the last digit of 2*5 = 10 is 0, which is
-// not equal to the last digit of 2142(2).
-
-Notes
-Numbers can be negative.
-
-bool lastDig(int a, int b, int c) {
-
-}
-
-Describe (last_digit)
-{
-	// True tests
-	It(true_test_1){Assert::That(lastDig(1, 1, 1), Equals(true));}
-	It(true_test_2){Assert::That(lastDig(12, 15, 10), Equals(true));}
-	It(true_test_3){Assert::That(lastDig(15228, 9209, 72162), Equals(true));}
-	// False tests
-	It(false_test_1){Assert::That(lastDig(15, 1, 1), Equals(false));}
-	It(false_test_2){Assert::That(lastDig(123, 15, 10), Equals(false));}
-	It(false_test_3){Assert::That(lastDig(5213, 99219, 6165), Equals(false));}
-	It(false_test_4){Assert::That(lastDig(1523, 513, 512), Equals(false));}
-	// Should work with negative numbers
-	It(negative_numbers_test_1){Assert::That(lastDig(-15, 1, 1), Equals(false));}
-	It(negative_numbers_test_2){Assert::That(lastDig(123, -15, 10), Equals(false));}
-	It(negative_numbers_test_3){Assert::That(lastDig(-12, 15, -10), Equals(true));}
-	It(negative_numbers_test_4){Assert::That(lastDig(15228, -9209, -72162), Equals(true));}
-};
+/* Task 4_45 - Roman Numerals https://edabit.com/challenge/L3s3vrs8PdJGDbRPg
 
 */
 
@@ -1908,50 +1659,7 @@ void tasks::task4_45()
 	std::cout << "Hello Task4_45!" << std::endl;
 }
 
-/* Task 4_46 -
-
-Create a function that takes a string as an argument and converts the first character of each word to uppercase. Return the newly formatted string.
-
-Examples
-makeTitle("This is a title") ➞ "This Is A Title"
-makeTitle("capitalize every word") ➞ "Capitalize Every Word"
-makeTitle("I Like Pizza") ➞ "I Like Pizza"
-makeTitle("PIZZA PIZZA PIZZA") ➞ "PIZZA PIZZA PIZZA"
-
-Notes
-You can expect a valid string for each test case.
-Some words may contain more than one uppercase letter (see example #4).
-
-std::string makeTitle(std::string s) {
-
-}
-
-Describe(capitalize_words_tests)
-{
-	It(test1){Assert::That(makeTitle("I am a title"), Equals("I Am A Title"));}
-	It(test2){Assert::That(makeTitle("I AM A TITLE"), Equals("I AM A TITLE"));}
-	It(test3){Assert::That(makeTitle("i aM a tITLE"), Equals("I AM A TITLE"));}
-	It(test4){Assert::That(makeTitle("the first letter of every word is capitalized"), Equals("The First Letter Of Every Word Is Capitalized"));}
-	It(test5){Assert::That(makeTitle("I Like Pizza"), Equals("I Like Pizza"));}
-	It(test6){Assert::That(makeTitle("Me and my wife lived happily for twenty years and then we met."), Equals("Me And My Wife Lived Happily For Twenty Years And Then We Met."));}
-	It(test7){Assert::That(makeTitle("There are no stupid questions, just stupid people."), Equals("There Are No Stupid Questions, Just Stupid People."));}
-
-	It(should_work_with_apostrophes_and_commas)
-	{
-		Assert::That(makeTitle("Don't count your ChiCKens BeFore They HatCh"), Equals("Don't Count Your ChiCKens BeFore They HatCh"));
-		Assert::That(makeTitle("All generalizations are false, including this one"), Equals("All Generalizations Are False, Including This One"));
-	}
-
-	It(should_work_with_entirely_uppercased_strings)
-	{
-		Assert::That(makeTitle("PIZZA PIZZA PIZZA"), Equals("PIZZA PIZZA PIZZA"));
-	}
-
-	It(should_work_with_words_containing_digits)
-	{
-		Assert::That(makeTitle("1f you c4n r34d 7h15, you r34lly n33d 2 g37 l41d"), Equals("1f You C4n R34d 7h15, You R34lly N33d 2 G37 L41d"));
-	}
-};
+/* Task 4_46 - Bit Rotation https://edabit.com/challenge/NgtAmTiF3sg4X2D38
 
 */
 
@@ -1960,34 +1668,7 @@ void tasks::task4_46()
 	std::cout << "Hello Task4_46!" << std::endl;
 }
 
-/* Task 4_47 -
-
-Wild Roger is tasked with shooting down 6 bottles with 6 shots as fast as possible. Here are the different types of shots he could make:
-
-He could use one pistol to shoot a bottle with a "Bang!" in 0.5 seconds.
-Or he could use both pistols at once with a "BangBang!" to shoot two bottles in 0.5 seconds.
-Given an array of strings, return the time (in seconds) it took to shoot down all 6 bottles. Make sure to only count Bangs and BangBangs. Anything else doesn't count.
-
-Examples
-rogerShots(["Bang!", "Bang!", "Bang!", "Bang!", "Bang!", "Bang!"]) ➞ 3
-rogerShots(["Bang!", "Bang!", "Bang!", "Bang!", "BangBang!"]) ➞ 2.5
-rogerShots(["Bang!", "BangBangBang!", "Boom!", "Bang!", "BangBang!", "BangBang!"]) ➞ 2
-
-Notes
-All the bottles will be shot down in all the tests.
-
-double rogerShots(std::vector<std::string> arr) {
-
-}
-
-Describe(rogerShots_){
-It(test1){Assert::That(rogerShots({"Bang!", "Bang!", "Bang!", "Bang!", "Bang!", "Bang!"}), Equals(3));}
-It(test2){Assert::That(rogerShots({"Bang!", "Bang!", "Bang!", "Bang!", "BangBang!"}), Equals(2.5));}
-It(test3){Assert::That(rogerShots({"Bang!", "BangBangBang!", "Boom!", "Bang!", "BangBang!", "BangBang!"}), Equals(2));}
-It(test4){Assert::That(rogerShots({"BangBang!", "BangBang!", "BangBang!"}), Equals(1.5));}
-It(test5){Assert::That(rogerShots({"Bang!", "BadaBing!", "Badaboom!", "Bang!", "Bang!", "Bang!", "Bang!", "Bang!"}), Equals(3));}
-It(test6){Assert::That(rogerShots({"BangBang!", "BangBang!", "Bag!", "Ban!", "Tang!", "Bang!", "Bang!"}), Equals(2));}
-};
+/* Task 4_47 - Text Twist! https://edabit.com/challenge/BnmJTpMNfJo2ajoQS
 
 */
 
@@ -1996,37 +1677,7 @@ void tasks::task4_47()
 	std::cout << "Hello Task4_47!" << std::endl;
 }
 
-/* Task 4_48 -
-
-Create a function that takes an array of positive and negative numbers. Return an array where the first element is the count of positive numbers and the second element is the sum of negative numbers.
-
-Examples
-countPosSumNeg([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, -11, -12, -13, -14, -15]) ➞ [10, -65]
-// There are a total of 10 positive numbers.
-// The sum of all negative numbers equals -65.
-countPosSumNeg([92, 6, 73, -77, 81, -90, 99, 8, -85, 34]) ➞ [7, -252]
-countPosSumNeg([91, -4, 80, -73, -28]) ➞ [2, -105]
-countPosSumNeg([]) ➞ []
-
-Notes
-If given an empty array, return an empty array: []
-0 is not positive.
-
-std::vector<int> countPosSumNeg(std::vector<int> arr) {
-
-}
-
-Describe(count_pos_sum_neg)
-{
-  It(test1){Assert::That(countPosSumNeg({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, -11, -12, -13, -14, -15}), Equals(std::vector<int>({10, -65})));}
-  It(test2){Assert::That(countPosSumNeg({92, 6, 73, -77, 81, -90, 99, 8, -85, 34}), Equals(std::vector<int>({7, -252})));}
-  It(test3){Assert::That(countPosSumNeg({91, -4, 80, -73, -28}), Equals(std::vector<int>({2, -105})));}
-  It(test4){Assert::That(countPosSumNeg({69, 100, 28, 47, 53, -61, -24}), Equals(std::vector<int>({5, -85})));}
-  It(test5){Assert::That(countPosSumNeg({5, 7, 9, -3, -7, 61, -24}), Equals(std::vector<int>({4, -34})));}
-  It(test6){Assert::That(countPosSumNeg({98, 51, -19, -97}), Equals(std::vector<int>({2, -116})));}
-  It(test7){Assert::That(countPosSumNeg({-42, 3, -51, -64, 69, 77, -20, -5, 68, -76}), Equals(std::vector<int>({4, -258})));}
-  It(test8){Assert::That(countPosSumNeg({}), Equals(std::vector<int>({})));}
-};
+/* Task 4_48 - Polybius Square (Basic) https://edabit.com/challenge/JukSvPFLwkdXBexCf
 
 */
 
@@ -2035,30 +1686,7 @@ void tasks::task4_48()
 	std::cout << "Hello Task4_48!" << std::endl;
 }
 
-/* Task 4_49 -
-
-Create a function that takes a string of lowercase characters and returns that string reversed and in upper case.
-
-Examples
-reverseCapitalize("abc") ➞ "CBA"
-reverseCapitalize("hellothere") ➞ "EREHTOLLEH"
-reverseCapitalize("input") ➞ "TUPNI"
-
-Notes
-N/A
-
-std::string reverseCapitalize(std::string str) {
-
-}
-
-Describe(tests)
-{
-  It(test1){Assert::That(reverseCapitalize("edabit"), Equals("TIBADE"));}
-	It(test2){Assert::That(reverseCapitalize("abc"), Equals("CBA"));}
-	It(test3){Assert::That(reverseCapitalize("hellothere"), Equals("EREHTOLLEH"));}
-	It(test4){Assert::That(reverseCapitalize("input"), Equals("TUPNI"));}
-	It(test5){Assert::That(reverseCapitalize("indubitably"), Equals("YLBATIBUDNI"));}
-};
+/* Task 4_49 - Headline Hash Tags https://edabit.com/challenge/aQrEYMaEG3nrAwb9z
 
 */
 
@@ -2067,32 +1695,7 @@ void tasks::task4_49()
 	std::cout << "Hello Task4_49!" << std::endl;
 }
 
-/* Task 4_50 -
-
-Write a function, that replaces all vowels in a string with a specified vowel.
-
-Examples
-vowReplace("apples and bananas", "u") ➞ "upplus und bununus"
-vowReplace("cheese casserole", "o") ➞ "chooso cossorolo"
-vowReplace("stuffed jalapeno poppers", "e") ➞ "steffed jelepene peppers"
-
-Notes
-All words will be lowercase.
-Y is not considered a vowel.
-
-using namespace std;
-string vowReplace(string word, char vowel) {
-
-}
-
-Describe(Vowel_Replacer) {
-  It(Test0){Assert::That(vowReplace("apples and bananas", 'u'), Equals("upplus und bununus"));}
-  It(Test1){Assert::That(vowReplace("cheese casserole", 'o'), Equals("chooso cossorolo"));}
-  It(Test2){Assert::That(vowReplace("stuffed jalapeno poppers", 'e'), Equals("steffed jelepene peppers"));}
-  It(Test3){Assert::That(vowReplace("shrimp tempura", 'a'), Equals("shramp tampara"));}
-  It(Test4){Assert::That(vowReplace("tuna sashimi", 'i'), Equals("tini sishimi"));}
-  It(Test5){Assert::That(vowReplace("chocolate cake", 'a'), Equals("chacalata caka"));}
-};
+/* Task 4_50 - Spiral Matrix https://edabit.com/challenge/wmJWogKLQPGWyYYdZ
 
 */
 
