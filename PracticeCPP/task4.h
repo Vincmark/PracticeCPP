@@ -2,5 +2,54 @@
 
 namespace tasks {
 	void task4();
+	void task4_1();
+	void task4_2();
+	void task4_3();
+	void task4_4();
+	void task4_5();
+	void task4_6();
+	void task4_7();
+	void task4_8();
+	void task4_9();
+	void task4_10();
+	void task4_11();
+	void task4_12();
+	void task4_13();
+	void task4_14();
+	void task4_15();
+	void task4_16();
+	void task4_17();
+	void task4_18();
+	void task4_19();
+	void task4_20();
+	void task4_21();
+	void task4_22();
+	void task4_23();
+	void task4_24();
+	void task4_25();
+	void task4_26();
+	void task4_27();
+	void task4_28();
+	void task4_29();
+	void task4_30();
+	void task4_31();
+	void task4_32();
+	void task4_33();
+	void task4_34();
+	void task4_35();
+	void task4_36();
+	void task4_37();
+	void task4_38();
+	void task4_39();
+	void task4_40();
+	void task4_41();
+	void task4_42();
+	void task4_43();
+	void task4_44();
+	void task4_45();
+	void task4_46();
+	void task4_47();
+	void task4_48();
+	void task4_49();
+	void task4_50();
 }
-
