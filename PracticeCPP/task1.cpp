@@ -5,7 +5,11 @@ Easy tasks
 
 */
 #include <iostream>
+#include <cassert>
+#include <vector>
 #include "task1.h"
+using namespace std;
+
 
 void tasks::task1()
 {
@@ -44,6 +48,19 @@ Describe(get_abs_sum)
 void tasks::task1_1()
 {
 	std::cout << "Hello Task1_1!" << std::endl;
+}
+
+int getAbsSum(std::vector<int> arr) {
+	return 0;
+}
+
+void tasks::test_task1_1() {
+	assert(getAbsSum({ 2, -1, -3, 4, 8 }) == 18);
+	assert(getAbsSum({ -1 }) == 1);
+	assert(getAbsSum({ -1, -3, -5, -4, -10, 0 }) == 23);
+	assert(getAbsSum({ 8, 9, 10, 32, 101, -10 }) == 170);
+	assert(getAbsSum({ 500 }) == 500);
+	cout << "task1_1 test finished" << endl;
 }
 
 /* Task 1_2 - Count Syllables

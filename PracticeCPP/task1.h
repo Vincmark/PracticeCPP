@@ -3,6 +3,7 @@
 namespace tasks {
 	void task1();
 	void task1_1();
+	void test_task1_1();
 	void task1_2();
 	void task1_3();
 	void task1_4();

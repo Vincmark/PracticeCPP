@@ -28,6 +28,7 @@ void testSum() {
 
 int main()
 {
+    test_task1_1();
     testSum();
     cout << "Hello World!\n";
     task1();
