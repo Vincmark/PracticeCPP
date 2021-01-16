@@ -106,9 +106,27 @@ Describe(number_of_syllables)
 
 */
 
+int numberSyllables(string word) {
+	return 0;
+}
+
+void test_task1_2() {
+	assert(numberSyllables("buf-fet") == 2);
+	assert(numberSyllables("beau-ti-ful") == 3);
+	assert(numberSyllables("mon-u-men-tal") == 4);
+	assert(numberSyllables("on-o-mat-o-poe-ia") == 6);
+	assert(numberSyllables("o-ver-ly") == 3);
+	assert(numberSyllables("pas-try") == 2);
+	assert(numberSyllables("flu-id") == 2);
+	assert(numberSyllables("syl-la-ble") == 3);
+	cout << "task1_2 test finished" << endl;
+}
+
 void tasks::task1_2()
 {
-	std::cout << "Hello Task1_2!" << std::endl;
+	cout << "Hello Task1_2!" << endl;
+	cout << numberSyllables("stringggoooo") << endl;
+	test_task1_2();
 }
 
 /* Task 1_3 - Burrrrrrrp
@@ -141,9 +159,25 @@ Describe(Burrrrrp)
 
 */
 
+string longBurp(int num) {
+	return "Burrrr";
+}
+
+void test_task1_3() {
+	assert(longBurp(3) == "Burrrp");
+	assert(longBurp(9) == "Burrrrrrrrrp");
+	assert(longBurp(10) == "Burrrrrrrrrrp");
+	assert(longBurp(13) == "Burrrrrrrrrrrrrp");
+	assert(longBurp(18) == "Burrrrrrrrrrrrrrrrrrp");
+	assert(longBurp(1) == "Burp");
+	cout << "task1_3 test finished" << endl;
+}
+
 void tasks::task1_3()
 {
-	std::cout << "Hello Task1_3!" << std::endl;
+	cout << "Hello Task1_3!" << endl;
+	cout << numberSyllables("stringggoooo") << endl;
+	test_task1_3();
 }
 
 /* Task 1_4 - Broken Bridge
@@ -172,9 +206,23 @@ It(test4){Assert::That(isSafeBridge("# #"), Equals(false));}
 
 */
 
+bool isSafeBridge(string s) {
+	return true;
+}
+
+void test_task1_4() {
+	assert(isSafeBridge("####") == true);
+	assert(isSafeBridge("## ####") == false);
+	assert(isSafeBridge("#") == true);
+	assert(isSafeBridge("# #") == false);
+	cout << "task1_4 test finished" << endl;
+}
+
 void tasks::task1_4()
 {
-	std::cout << "Hello Task1_4!" << std::endl;
+	cout << "Hello Task1_4!" << endl;
+	cout << isSafeBridge("sgdfggggdf") << endl;
+	test_task1_4();
 }
 
 /* Task 1_5 - The Million Dollar Fence
@@ -209,9 +257,27 @@ It(test8){Assert::That(constructFence("$1000"), Equals("HHHHHHHHHHHHHHHHHHHHHHHH
 
 */
 
+string constructFence(string price) {
+	return "fsdf";
+}
+
+void test_task1_5() {
+	assert(constructFence("$50,000") == "HHHHHHHHHHHHHHHHHHHH");
+	assert(constructFence("$100,000") == "HHHHHHHHHH");
+	assert(constructFence("$1,000,000") == "H");
+	assert(constructFence("$500,000") == "HH");
+	assert(constructFence("$20,000") == "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+	assert(constructFence("$10,000") == "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+	assert(constructFence("$5000") == "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+	assert(constructFence("$1000") == "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+	cout << "task1_5 test finished" << endl;
+}
+
 void tasks::task1_5()
 {
-	std::cout << "Hello Task1_5!" << std::endl;
+	cout << "Hello Task1_5!" << endl;
+	cout << isSafeBridge("sgdfggggdf") << endl;
+	test_task1_5();
 }
 
 /* Task 1_6 - Triangular Number Sequence
@@ -244,9 +310,24 @@ Describe(tests)
 
 */
 
+int triangle(int n) {
+	return 1;
+}
+
+void test_task1_6() {
+	assert(triangle(1) == 1);
+	assert(triangle(2) == 3);
+	assert(triangle(3) == 6);
+	assert(triangle(8) == 36);
+	assert(triangle(2153) == 2318781);
+	cout << "task1_6 test finished" << endl;
+}
+
 void tasks::task1_6()
 {
-	std::cout << "Hello Task1_6!" << std::endl;
+	cout << "Hello Task1_6!" << endl;
+	cout << triangle(10) << endl;
+	test_task1_6();
 }
 
 /* Task 1_7 - Default Mood
@@ -277,9 +358,25 @@ Describe(mood_string)
 
 */
 
+string moodToday(string mood) {
+	return "good mood";
+}
+
+void test_task1_7() {
+	assert(moodToday("happy") == "Today, I am feeling happy");
+	assert(moodToday("sad") == "Today, I am feeling sad");
+	assert(moodToday("very happy") == "Today, I am feeling very happy");
+	assert(moodToday("rather empty inside") == "Today, I am feeling rather empty inside");
+	assert(moodToday("confused") == "Today, I am feeling confused");
+	assert(moodToday("") == "Today, I am feeling neutral");
+	cout << "task1_7 test finished" << endl;
+}
+
 void tasks::task1_7()
 {
-	std::cout << "Hello Task1_7!" << std::endl;
+	cout << "Hello Task1_7!" << endl;
+	cout << moodToday("takoje") << endl;
+	test_task1_7();
 }
 
 /* Task 1_8 - Pair Management
@@ -307,9 +404,26 @@ Describe(pair_management)
 
 */
 
+vector<int> pairs(pair <int, int> p) {
+	return vector<int>({ 1, 2 });
+}
+
+void test_task1_8() {
+	assert(pairs(make_pair(1, 2)) == vector<int>({ 1, 2 }));
+	assert(pairs(make_pair(21, 82)) == vector<int>({ 21, 82 }));
+	assert(pairs(make_pair(4213, 526)) == vector<int>({ 4213, 526 }));
+	cout << "task1_8 test finished" << endl;
+}
+
 void tasks::task1_8()
 {
-	std::cout << "Hello Task1_8!" << std::endl;
+	cout << "Hello Task1_8!" << endl;
+	for (auto x : pairs(make_pair(1, 2))) 
+	{
+		cout << x << endl;
+	}
+	
+	test_task1_8();
 }
 
 /* Task 1_9 - Sort Numbers in Ascending Order
@@ -346,9 +460,30 @@ Describe(sort_nums_ascending)
 
 */
 
+vector<int> sortNumsAscending(vector<int> arr) {
+	return vector<int>({ 1, 2 });
+}
+
+void test_task1_9() {
+	assert(sortNumsAscending({ 1, 2, 10, 50, 5 }) == vector<int>({ 1, 2, 5, 10, 50 }));
+	assert(sortNumsAscending({ 80, 29, 4, -95, -24, 85 }) == vector<int>({ -95, -24, 4, 29, 80, 85 }));
+	assert(sortNumsAscending({ 47, 51, -17, -16, 91, 47, -85, -8, -16, -27 }) == vector<int>({ -85, -27, -17, -16, -16, -8, 47, 47, 51, 91 }));
+	assert(sortNumsAscending({ -51, -73, 65, 69, -76, 74, -14 }) == vector<int>({ -76, -73, -51, -14, 65, 69, 74 }));
+	assert(sortNumsAscending({ 45, 98, 35, 65, 97, 21, 33 }) == vector<int>({ 21, 33, 35, 45, 65, 97, 98 }));
+	assert(sortNumsAscending({ -23, -69, -54, -2, -32 }) == vector<int>({ -69, -54, -32, -23, -2 }));
+	assert(sortNumsAscending({ -21, -9, -96 }) == vector<int>({ -96, -21, -9 }));
+	assert(sortNumsAscending({ 0 }) == vector<int>({ 0 }));
+	cout << "task1_9 test finished" << endl;
+}
+
 void tasks::task1_9()
 {
-	std::cout << "Hello Task1_9!" << std::endl;
+	cout << "Hello Task1_9!" << endl;
+	for (auto x : sortNumsAscending(vector<int>({ 1, 2, 5, 10, 50 })))
+	{
+		cout << x << endl;
+	}
+	test_task1_9();
 }
 
 /* Task 1_10 - Maskify the String
@@ -388,9 +523,30 @@ Describe(the_maskify)
 
 */
 
+string maskify(string str) {
+	return "dfsdfd";
+}
+
+void test_task1_10() {
+	assert(maskify("4556364607935616") == "############5616");
+	assert(maskify("64607935616") == "#######5616");
+	assert(maskify("1") == "1");
+	assert(maskify("") == "");
+	assert(maskify("tBy>L/cMe+?<j:6n;C~H") == "################;C~H");
+	assert(maskify("12") == "12");
+	assert(maskify("8Ikhlf6yoxPOwi5cB014eWbRumj7vJ") == "##########################j7vJ");
+	assert(maskify("123") == "123");
+	assert(maskify(")E$aCU=e\"_") == "######=e\"_");
+	assert(maskify("2673951408") == "######1408");
+	assert(maskify("1234") == "1234");
+	cout << "task1_10 test finished" << endl;
+}
+
 void tasks::task1_10()
 {
-	std::cout << "Hello Task1_10!" << std::endl;
+	cout << "Hello Task1_10!" << endl;
+	cout << maskify("5345345") << endl;
+	test_task1_10();
 }
 
 /* Task 1_11 - Eliminate Odd Numbers within an Array
