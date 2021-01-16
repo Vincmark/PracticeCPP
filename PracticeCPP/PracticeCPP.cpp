@@ -12,5 +12,7 @@ int main()
     //task1_1();
     //task1_2();
     //task1_3();
-    task1_4();
+    //task1_4();
+    task1_5();
+
 }

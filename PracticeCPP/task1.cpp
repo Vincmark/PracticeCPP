@@ -7,6 +7,7 @@ Easy tasks
 #include <iostream>
 #include <cassert>
 #include <vector>
+#include <string>
 #include "task1.h"
 using namespace std;
 
@@ -45,7 +46,7 @@ Describe(get_abs_sum)
 
 */
 
-int getAbsSum(vector<int> arr) {
+int getAbsSum(const vector<int> &arr) {
 	int sum = 0;
 	for (auto &x : arr) {
 		sum += abs(x);
@@ -69,9 +70,6 @@ void tasks::task1_1()
 	cout << getAbsSum(arr) << endl;
 	test_task1_1();
 }
-
-
-
 
 /* Task 1_2 - Count Syllables
  
@@ -106,8 +104,18 @@ Describe(number_of_syllables)
 
 */
 
-int numberSyllables(string word) {
-	return 0;
+int numberSyllables(const string &word) {
+	int syllablesCount = 0;
+	bool onSyllable = false;
+	for (int i = 0; i < word.size(); i++) {
+		if ((word[i] != '-') && !onSyllable)
+		{
+			onSyllable = true;
+			syllablesCount++;
+		} else if ((word[i] == '-') && onSyllable)
+			onSyllable = false;
+	}
+	return syllablesCount;
 }
 
 void test_task1_2() {
@@ -119,13 +127,17 @@ void test_task1_2() {
 	assert(numberSyllables("pas-try") == 2);
 	assert(numberSyllables("flu-id") == 2);
 	assert(numberSyllables("syl-la-ble") == 3);
+	assert(numberSyllables("s") == 1);
+	assert(numberSyllables("") == 0);
+	assert(numberSyllables("-") == 0);
+	assert(numberSyllables("---") == 0);
 	cout << "task1_2 test finished" << endl;
 }
 
 void tasks::task1_2()
 {
 	cout << "Hello Task1_2!" << endl;
-	cout << numberSyllables("stringggoooo") << endl;
+	cout << numberSyllables("-strin--ggg----oo---t-oo-") << endl;
 	test_task1_2();
 }
 
@@ -160,7 +172,12 @@ Describe(Burrrrrp)
 */
 
 string longBurp(int num) {
-	return "Burrrr";
+	string result = "Bu";
+	for (int i = 0; i < num; i++) {
+		result += "r";
+	}	
+	result += "p";
+	return result;
 }
 
 void test_task1_3() {
@@ -176,7 +193,7 @@ void test_task1_3() {
 void tasks::task1_3()
 {
 	cout << "Hello Task1_3!" << endl;
-	cout << numberSyllables("stringggoooo") << endl;
+	cout << longBurp(5) << endl;
 	test_task1_3();
 }
 
@@ -206,8 +223,12 @@ It(test4){Assert::That(isSafeBridge("# #"), Equals(false));}
 
 */
 
-bool isSafeBridge(string s) {
-	return true;
+bool isSafeBridge(const string &s) {
+	if (s.find(" ",0) != string::npos)
+		return false;
+	else
+		return true;
+
 }
 
 void test_task1_4() {
@@ -215,13 +236,17 @@ void test_task1_4() {
 	assert(isSafeBridge("## ####") == false);
 	assert(isSafeBridge("#") == true);
 	assert(isSafeBridge("# #") == false);
+	assert(isSafeBridge(" #") == false);
+	assert(isSafeBridge("") == true);
+	assert(isSafeBridge("# ") == false);
+
 	cout << "task1_4 test finished" << endl;
 }
 
 void tasks::task1_4()
 {
 	cout << "Hello Task1_4!" << endl;
-	cout << isSafeBridge("sgdfggggdf") << endl;
+	cout << isSafeBridge("") << endl;
 	test_task1_4();
 }
 
@@ -257,8 +282,25 @@ It(test8){Assert::That(constructFence("$1000"), Equals("HHHHHHHHHHHHHHHHHHHHHHHH
 
 */
 
-string constructFence(string price) {
-	return "fsdf";
+string constructFence(const string &price) {
+	string pr = price;
+	for (int i = 0; i < pr.length(); i++) {
+		try {
+			string str;
+			str += pr[i];
+			cout << "str=" << str << endl;
+			int num = stoi(str);
+			cout << num << endl;
+		}
+		catch (const invalid_argument& err) {
+			cout << "can't be converted! " << endl;
+			pr.replace(i,1,"");
+			i--;
+		}
+	}
+	cout << "price=" << price << " length=" << price.length() << endl;
+	cout << "pr=" << pr << " length=" << pr.length() << endl;
+	return pr;
 }
 
 void test_task1_5() {
@@ -276,8 +318,9 @@ void test_task1_5() {
 void tasks::task1_5()
 {
 	cout << "Hello Task1_5!" << endl;
-	cout << isSafeBridge("sgdfggggdf") << endl;
-	test_task1_5();
+	cout << constructFence("$1,000,000,,000") << endl;
+	cout << constructFence("$,,,,") << endl;
+	//test_task1_5();
 }
 
 /* Task 1_6 - Triangular Number Sequence
