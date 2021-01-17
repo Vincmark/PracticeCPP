@@ -387,7 +387,8 @@ Describe(tests)
 */
 
 int triangle(int n) {
-	return 1;
+	// кастинг на более широкое чесло нужен.
+	return 0.5*n*(n+1);
 }
 
 void test_task1_6() {
@@ -435,7 +436,10 @@ Describe(mood_string)
 */
 
 string moodToday(string mood) {
-	return "good mood";
+	if (mood == "")
+		return "Today, I am feeling neutral";
+	else 
+		return "Today, I am feeling " + mood;
 }
 
 void test_task1_7() {
