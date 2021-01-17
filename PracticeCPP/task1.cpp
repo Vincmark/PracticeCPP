@@ -989,7 +989,11 @@ Describe(double_char)
 */
 
 string doubleChar(const string &str) {
-	return "";
+	string result = "";
+	for (auto x : str) {
+		result = result + x + x;
+	}
+	return result;
 }
 
 void test_task1_16() {
@@ -1049,7 +1053,9 @@ Describe(alphabet_soup)
 */
 
 string alphabetSoup(const string &str) {
-	return "";
+	string result = str;
+	sort(result.begin(), result.end());
+	return result;
 }
 
 void test_task1_17() {
@@ -1104,7 +1110,15 @@ Describe(amplify_four)
 */
 
 vector<int> amplify(int n) {
-	return { 1, 2, 3 };
+	vector<int> result = {};
+	for (int i = 1; i <= n; i++) {
+		if (i % 4 == 0)
+			result.push_back(i * 10);
+		else
+			result.push_back(i);
+	}
+
+	return result;
 }
 
 void test_task1_18() {
@@ -1160,8 +1174,13 @@ Describe(enough_change_tests)
 
 */
 
-bool changeEnough(vector<int> change, float amountDue) {
-	return true;
+bool changeEnough(const vector<int> &change, float amountDue) {
+	float pocketMoney = float(change[0]) * 0.25 + float(change[1]) * 0.10 + float(change[2]) * 0.05 + float(change[3]) * 0.01;
+	cout << pocketMoney << " " << amountDue << endl;
+	if (pocketMoney >= amountDue)
+		return true;
+	else
+		return false;
 }
 
 void test_task1_19() {
@@ -1179,7 +1198,7 @@ void test_task1_19() {
 void tasks::task1_19()
 {
 	cout << "Hello Task1_19!" << endl;
-	cout << changeEnough({ 1, 2, 3, 4, 5}, 0.5) << endl;
+	cout << changeEnough({ 1, 2, 3, 4 }, 0.5) << endl;
 	test_task1_19();
 }
 
@@ -1216,7 +1235,9 @@ Describe(reverse_order)
 */
 
 string reverse(const string &str) {
-	return "";
+	string result = str;
+	reverse(result.begin(), result.end());
+	return result;
 }
 
 void test_task1_20() {
@@ -1273,9 +1294,27 @@ Describe(tests) {
 
 */
 
+int equal(int a, int b, int c) {
+
+}
+
+void test_task1_21() {
+	assert(equal(2, 3, 4) == 0);
+	assert(equal(7, 3, 4) == 0);
+	assert(equal(1, 7, 6) == 0);
+	assert(equal(7, 3, 7) == 2);
+	assert(equal(3, 3, 6) == 2);
+	assert(equal(4, 4, 4) == 3);
+	assert(equal(1, 1, 1) == 3);
+	assert(equal(7, 7, 7) == 3);
+	cout << "task1_21 test finished" << endl;
+}
+
 void tasks::task1_21()
 {
-	std::cout << "Hello Task1_21!" << std::endl;
+	cout << "Hello Task1_21!" << endl;
+	cout << equal(1, 2, 3) << endl;
+	test_task1_21();
 }
 
 /* Task 1_22 - Array of Multiples
@@ -1312,9 +1351,28 @@ Describe(ArrayOfMultiplesTests) {
 
 */
 
+vector<int> arrayOfMultiples(int num, int length) {
+
+}
+
+void test_task1_22() {
+	assert(arrayOfMultiples(7, 5) == vector<int>({ 7, 14, 21, 28, 35 }));
+	assert(arrayOfMultiples(12, 10) == vector<int>({ 12, 24, 36, 48, 60, 72, 84, 96, 108, 120 }));
+	assert(arrayOfMultiples(17, 7) == vector<int>({ 17, 34, 51, 68, 85, 102, 119 }));
+	assert(arrayOfMultiples(630, 14) == vector<int>({ 630, 1260, 1890, 2520, 3150, 3780, 4410, 5040, 5670, 6300, 6930, 7560, 8190, 8820 }));
+	assert(arrayOfMultiples(140, 3) == vector<int>({ 140, 280, 420 }));
+	assert(arrayOfMultiples(7, 8) == vector<int>({ 7, 14, 21, 28, 35, 42, 49, 56 }));
+	assert(arrayOfMultiples(11, 21) == vector<int>({ 11, 22, 33, 44, 55, 66, 77, 88, 99, 110, 121, 132, 143, 154, 165, 176, 187, 198, 209, 220, 231 }));
+	cout << "task1_22 test finished" << endl;
+}
+
 void tasks::task1_22()
 {
-	std::cout << "Hello Task1_22!" << std::endl;
+	cout << "Hello Task1_22!" << endl;
+	for (auto x: arrayOfMultiples(10, 10)) {
+		cout << x;
+	}
+	test_task1_22();
 }
 
 /* Task 1_23 - Hitting the Jackpot
@@ -1353,9 +1411,30 @@ Describe(test_jackpot_tests)
 
 */
 
+bool testJackpot(const vector<string> &result) {
+
+}
+
+void test_task1_23() {
+	assert(testJackpot({ "@", "@", "@", "@" }) == true);
+	assert(testJackpot({ "!", "!", "!", "!" }) == true);
+	assert(testJackpot({ "abc", "abc", "abc", "abc" }) == true);
+	assert(testJackpot({ "karaoke", "karaoke", "karaoke", "karaoke" }) == true);
+	assert(testJackpot({ "SS", "SS", "SS", "SS" }) == true);
+	assert(testJackpot({ ":(", ":)", ":|", ":|" }) == false);
+	assert(testJackpot({ "&&", "&", "&&&", "&&&&" }) == false);
+	assert(testJackpot({ "hee", "heh", "heh", "heh" }) == false);
+	assert(testJackpot({ "SS", "SS", "SS", "Ss" }) == false);
+	assert(testJackpot({ "SS", "SS", "Ss", "Ss" }) == false);
+
+	cout << "task1_23 test finished" << endl;
+}
+
 void tasks::task1_23()
 {
-	std::cout << "Hello Task1_23!" << std::endl;
+	cout << "Hello Task1_23!" << endl;
+	cout << testJackpot({"1","2","3"});
+	test_task1_23();
 }
 
 /* Task 1_24 - Change Every Letter to the Next Letter
@@ -1387,9 +1466,23 @@ Describe(letter_to_next_letter)
 
 */
 
+string move(string word) {
+
+}
+
+void test_task1_24() {
+	assert(move("hello") == "ifmmp");
+	assert(move("lol") == "mpm");
+	assert(move("bye") == "czf");
+
+	cout << "task1_24 test finished" << endl;
+}
+
 void tasks::task1_24()
 {
-	std::cout << "Hello Task1_24!" << std::endl;
+	cout << "Hello Task1_24!" << endl;
+	cout << move("fhf jh g jfhhjgf");
+	test_task1_24();
 }
 
 /* Task 1_25 - Count Ones in a 2D Array
@@ -1456,9 +1549,26 @@ Describe(count_ones_tests)
 
 */
 
+int count_ones(vector< vector<int> > matrix) {
+
+}
+
+void test_task1_25() {
+	assert(count_ones({{1, 0, 1}, {0, 0, 0}, {0, 0, 1}}) == 3);
+	assert(count_ones({{1, 1, 1}, {0, 0, 1}, {1, 1, 1}}) == 7);
+	assert(count_ones({{1, 2, 3}, {0, 2, 1}, {5, 7, 33}}) == 2);
+	assert(count_ones({{5, 2, 3}, {0, 2, 5}, {5, 7, 33}}) == 0);
+	assert(count_ones({{1, 1}, {0, 1}}) == 3);
+	assert(count_ones({{5, 2}, {0, 2}, {5, 1}}) == 1);
+
+	cout << "task1_25 test finished" << endl;
+}
+
 void tasks::task1_25()
 {
-	std::cout << "Hello Task1_25!" << std::endl;
+	cout << "Hello Task1_25!" << endl;
+	cout << count_ones({ {1, 0, 1}, {0, 0, 0}, {0, 0, 1} });
+	test_task1_25();
 }
 
 /* Task 1_26 - Return the Four Letter Strings
@@ -1490,9 +1600,29 @@ Describe(is_four_letters)
 
 */
 
+vector<string> isFourLetters(vector<string> arr) {
+
+}
+
+void test_task1_26() {
+	assert(isFourLetters({ "Ryan", "Kieran", "Jason", "Matt" }) == vector<string>({ "Ryan", "Matt" }));
+	assert(isFourLetters({ "Tomato", "Potato", "Pair" }) == vector<string>({ "Pair" }));
+	assert(isFourLetters({ "Kangaroo", "Bear", "Fox" }) == vector<string>({ "Bear" }));
+	assert(isFourLetters({ "Red", "Blue", "Green", "Pink" }) == vector<string>({ "Blue", "Pink" }));
+	assert(isFourLetters({ "is", "up", "two", "elephant" }) == vector<string>({}));
+	assert(isFourLetters({ "jazz", "quiz", "jump" }) == vector<string>({ "jazz", "quiz", "jump" }));
+	assert(isFourLetters({ "Broccoli", "Carrot", "Spinach" }) == vector<string>({ }));
+
+	cout << "task1_26 test finished" << endl;
+}
+
 void tasks::task1_26()
 {
-	std::cout << "Hello Task1_26!" << std::endl;
+	cout << "Hello Task1_26!" << endl;
+	for (auto x : isFourLetters({ "Ryan", "Kieran", "Jason", "Matt" })) {
+		cout << x << endl;
+	}
+	test_task1_26();
 }
 
 /* Task 1_27 - Is the String in Order?
@@ -1524,9 +1654,26 @@ Describe(is_string_in_order)
 
 */
 
+bool isInOrder(string str) {
+
+}
+
+void test_task1_27() {
+	assert(isInOrder("abc") == true);
+	assert(isInOrder("edabit") == false);
+	assert(isInOrder("xyz") == true);
+	assert(isInOrder("xyzz") == true);
+	assert(isInOrder("123") == true);
+	assert(isInOrder("321") == false);
+
+	cout << "task1_27 test finished" << endl;
+}
+
 void tasks::task1_27()
 {
-	std::cout << "Hello Task1_27!" << std::endl;
+	cout << "Hello Task1_27!" << endl;
+	cout << isInOrder("abc") << endl;
+	test_task1_27();
 }
 
 /* Task 1_28 - Xs and Os, Nobody Knows
@@ -1570,9 +1717,30 @@ Describe(x_o)
 
 */
 
+bool XO(string str) {
+
+}
+
+void test_task1_28() {
+	assert(XO("ooxx") == true);
+	assert(XO("xooxx") == false);
+	assert(XO("ooxXm") == true);
+	assert(XO("zpzpzpp") == true);
+	assert(XO("zzoo") == false);
+	assert(XO("Xo") == true);
+	assert(XO("x") == false);
+	assert(XO("o") == false);
+	assert(XO("xxxoo") == false);
+	assert(XO("") == true);
+
+	cout << "task1_28 test finished" << endl;
+}
+
 void tasks::task1_28()
 {
-	std::cout << "Hello Task1_28!" << std::endl;
+	cout << "Hello Task1_28!" << endl;
+	cout << XO("ooxx") << endl;
+	test_task1_28();
 }
 
 /* Task 1_29 - Return Odd > Even
@@ -1601,9 +1769,25 @@ Describe(oddeven_) {
 
 */
 
+bool oddeven(const vector<int> &arr) {
+
+}
+
+void test_task1_29() {
+	assert(oddeven({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }) == true);
+	assert(oddeven({ 1 }) == true);
+	assert(oddeven({ 1, 2, 3, 4, 5, 6, 7, 9 }) == true);
+	assert(oddeven({ 42, 1, 66 }) == false);
+	assert(oddeven({ 2, 3, 4, 5, 6, 7, 8 }) == false);
+
+	cout << "task1_29 test finished" << endl;
+}
+
 void tasks::task1_29()
 {
-	std::cout << "Hello Task1_29!" << std::endl;
+	cout << "Hello Task1_29!" << endl;
+	cout << oddeven({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }) << endl;
+	test_task1_29();
 }
 
 /* Task 1_30 - Negative Image
@@ -1703,9 +1887,24 @@ Describe(reverse_image)
 
 */
 
+vector<vector<int>> reverseImage(vector<vector<int>> image) {
+
+}
+
+void test_task1_30() {
+	assert(reverseImage({ {1, 0, 0}, {0, 1, 0}, {0, 0, 1} }) == (vector<vector<int>>({ {0, 1, 1}, {1, 0, 1},{1, 1, 0} })));
+	assert(reverseImage({ {1, 0, 0}, {0, 0, 0} }) == (vector<vector<int>>({ {0, 1, 1}, {1, 1, 1} })));
+	assert(reverseImage({ {1, 0, 0}, {1, 0, 0} }) == (vector<vector<int>>({ {0, 1, 1}, {0, 1, 1} })));
+	assert(reverseImage({ {1, 0, 0, 0, 0}, {1, 0, 0, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 0}, {1, 1, 1, 0, 0} }) == (vector<vector<int>>({ {0, 1, 1, 1, 1}, {0, 1, 1, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 1}, {0, 0, 0, 1, 1} })));
+	assert(reverseImage({ {1, 1}, {1, 0}, {1, 1}, {1, 1}, {1, 1} }) == (vector<vector<int>>({ {0, 0}, {0, 1}, {0, 0}, {0, 0}, {0, 0} })));
+	cout << "task1_30 test finished" << endl;
+}
+
 void tasks::task1_30()
 {
-	std::cout << "Hello Task1_30!" << std::endl;
+	cout << "Hello Task1_30!" << endl;
+	//cout << reverseImage({ {1, 0, 0}, {0, 1, 0}, {0, 0, 1} }) << endl;
+	test_task1_30();
 }
 
 /* Task 1_31 - Algorithms I: Introduction to Recursion

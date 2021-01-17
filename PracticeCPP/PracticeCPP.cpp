@@ -24,11 +24,11 @@ int main()
     //task1_13();
     //task1_14();
     //task1_15();
-    task1_16();
+    //task1_16();
     //task1_17();
     //task1_18();
     //task1_19();
-    //task1_20();
+    task1_20();
 
     //task1_20();
     //task1_21();
