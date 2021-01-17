@@ -5,6 +5,7 @@ Easy tasks
 
 */
 #include <iostream>
+#include <algorithm>
 #include <cassert>
 #include <vector>
 #include <string>
@@ -387,8 +388,8 @@ Describe(tests)
 */
 
 int triangle(int n) {
-	// кастинг на более широкое чесло нужен.
-	return 0.5*n*(n+1);
+	int result = 0.5 * n * (n + 1);
+	return result;
 }
 
 void test_task1_6() {
@@ -435,7 +436,7 @@ Describe(mood_string)
 
 */
 
-string moodToday(string mood) {
+string moodToday(const string &mood) {
 	if (mood == "")
 		return "Today, I am feeling neutral";
 	else 
@@ -484,8 +485,11 @@ Describe(pair_management)
 
 */
 
-vector<int> pairs(pair <int, int> p) {
-	return vector<int>({ 1, 2 });
+vector<int> pairs(const pair <int, int> &p) {
+	vector <int> result = {};
+	result.push_back(p.first);
+	result.push_back(p.second);
+	return result;
 }
 
 void test_task1_8() {
@@ -541,7 +545,8 @@ Describe(sort_nums_ascending)
 */
 
 vector<int> sortNumsAscending(vector<int> arr) {
-	return vector<int>({ 1, 2 });
+	sort(arr.begin(), arr.end());
+	return arr;
 }
 
 void test_task1_9() {
