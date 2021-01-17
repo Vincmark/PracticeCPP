@@ -608,8 +608,12 @@ Describe(the_maskify)
 
 */
 
-string maskify(string str) {
-	return "dfsdfd";
+string maskify(const string &str) {
+	string maskedStr = str;
+	for (int i = 0; i < int (maskedStr.length() - 4); i++) {
+		maskedStr.replace(i, 1, "#");
+	}
+	return maskedStr;
 }
 
 void test_task1_10() {
@@ -667,9 +671,37 @@ Describe(no_odds)
 
 */
 
+vector<int> noOdds(const vector<int> &arr) {
+	vector<int> result = {};
+	for (auto x : arr) {
+		if (x % 2 == 0)
+			result.push_back(x);
+	}
+	return result;
+}
+
+void test_task1_11() {
+	assert(noOdds({ 1, 2, 3, 4, 5, 6, 7, 8 }) == vector<int>({ 2, 4, 6, 8 }));
+	assert(noOdds({ 43, 65, 23, 89, 53, 9, 6 }) == vector<int>({ 6 }));
+	assert(noOdds({ 718, 991, 449, 644, 380, 440 }) == vector<int>({ 718, 644, 380, 440 }));
+	assert(noOdds({ 148, 6, 16, 85 }) == vector<int>({ 148, 6, 16 }));
+	assert(noOdds({ 9, 49, 23 }) == vector<int>({ }));
+	assert(noOdds({ 34, 43, 32, 49, 40 }) == vector<int>({ 34, 32, 40 }));
+	assert(noOdds({ 1232, 1990, 1284, 1391, 1958 }) == vector<int>({ 1232, 1990, 1284, 1958 }));
+	assert(noOdds({ 2766, 2651, 2373, 2916, 2397, 2539 }) == vector<int>({ 2766, 2916 }));
+	assert(noOdds({ 53, 65, 52, 62, 59 }) == vector<int>({ 52, 62 }));
+	assert(noOdds({ 393, 156, 14, 166, 129, 246 }) == vector<int>({ 156, 14, 166, 246 }));
+
+	cout << "task1_11 test finished" << endl;
+}
+
 void tasks::task1_11()
 {
-	std::cout << "Hello Task1_11!" << std::endl;
+	cout << "Hello Task1_11!" << endl;
+	for (auto x : noOdds({ 1,2,3,4,5,6,7,8,9 })) {
+		cout << x << endl;
+	}
+	test_task1_11();
 }
 
 /* Task 1_12 - Get Word Count
@@ -701,9 +733,43 @@ Describe(count_words)
 
 */
 
+int countWords(const string &str) {
+	int result = 0;
+	bool wordStarted = false;
+	for (int i = 0; i < str.length(); i++) {
+		if ((str[i] != ' ') && (str[i] != '!') && (str[i] != '.') && (str[i] != ',') && (str[i] != '?') && (str[i] != ':') && (str[i] != ';') && !wordStarted) {
+			
+			wordStarted = true;
+			result++;
+		}
+			
+		if ((str[i] == ' ') && wordStarted) {
+			wordStarted = false;
+		}
+	}
+	return result;
+}
+
+void test_task1_12() {
+	assert(countWords("It's high noon") == 3);
+	assert(countWords("Is this easy mode") == 4);
+	assert(countWords("What an easy task, right") == 5);
+	assert(countWords("This is a test") == 4);
+	assert(countWords("Just an example here move along") == 6);
+	assert(countWords("How are you today?") == 4);
+	assert(countWords("") == 0);
+	assert(countWords("         ") == 0);
+	assert(countWords(" I have a dream. Do you? ") == 6);
+	assert(countWords(" . ? : ! , ;") == 0);
+
+	cout << "task1_12 test finished" << endl;
+}
+
 void tasks::task1_12()
 {
-	std::cout << "Hello Task1_12!" << std::endl;
+	cout << "Hello Task1_12!" << endl;
+	cout << countWords(" dasdas   kjhkj k hkj j kj kjj  ") << endl; // 7
+	test_task1_12();
 }
 
 /* Task 1_13 - How Many Solutions Does This Quadratic Have?
@@ -736,9 +802,33 @@ Describe(basic_tests)
 
 */
 
+int solutions(int a, int b, int c) {
+	double D = pow(b,2) - (4 * a * c);
+	if (D > 0)
+		return 2;
+	else if (D == 0)
+		return 1;
+	else
+		return 0;
+}
+
+void test_task1_13() {
+	assert(solutions(1, 0, -1) == 2);
+	assert(solutions(1, 0, 0) == 1);
+	assert(solutions(1, 0, 1) == 0);
+	assert(solutions(200, 420, 800) == 0);
+	assert(solutions(200, 420, -800) == 2);
+	assert(solutions(1000, 1000, 0) == 2);
+	assert(solutions(10000, 400, 4) == 1);
+
+	cout << "task1_13 test finished" << endl;
+}
+
 void tasks::task1_13()
 {
-	std::cout << "Hello Task1_13!" << std::endl;
+	cout << "Hello Task1_13!" << endl;
+	cout << solutions(1, 2, 3) << endl;
+	test_task1_13();
 }
 
 /* Task 1_14 - How Many Vowels?
@@ -774,9 +864,45 @@ Describe(count_vowels)
 
 */
 
+int countVowels(const string &str) {
+	int result = 0;
+	for (auto x : str) {
+		switch (toupper(x)) {
+		case 'A': result++;
+			break;
+		case 'E': result++;
+			break;
+		case 'O': result++;
+			break;
+		case 'U': result++;
+			break;
+		case 'I': result++;
+			break;
+		}
+	}
+	return result;
+}
+
+void test_task1_14() {
+	assert(countVowels("Celebration") == 5);
+	assert(countVowels("Palm") == 1);
+	assert(countVowels("Prediction") == 4);
+	assert(countVowels("Suite") == 3);
+	assert(countVowels("Quote") == 3);
+	assert(countVowels("Portrait") == 3);
+	assert(countVowels("Steam") == 2);
+	assert(countVowels("Tape") == 2);
+	assert(countVowels("Nightmare") == 3);
+	assert(countVowels("Convention") == 4);
+
+	cout << "task1_14 test finished" << endl;
+}
+
 void tasks::task1_14()
 {
-	std::cout << "Hello Task1_14!" << std::endl;
+	cout << "Hello Task1_14!" << endl;
+	cout << countVowels("bla-bla-bla") << endl;
+	test_task1_14();
 }
 
 /* Task 1_15 - A Circle and Two Squares https://edabit.com/challenge/8xjxawTJEiuXnb5Gg
@@ -807,9 +933,27 @@ Describe(tests)
 
 */
 
+int squareAreasDifference(int r) {
+	int squareBigger = pow(2 * r , 2);
+	int squareSmaller = squareBigger / 2;
+	return squareBigger - squareSmaller;
+
+}
+
+void test_task1_15() {
+	assert(squareAreasDifference(5) == 50);
+	assert(squareAreasDifference(6) == 72);
+	assert(squareAreasDifference(7) == 98);
+	assert(squareAreasDifference(17) == 578);
+
+	cout << "task1_15 test finished" << endl;
+}
+
 void tasks::task1_15()
 {
-	std::cout << "Hello Task1_15!" << std::endl;
+	cout << "Hello Task1_15!" << endl;
+	cout << squareAreasDifference(10) << endl;
+	test_task1_15();
 }
 
 /* Task 1_16 - Repeating Letters
@@ -844,9 +988,30 @@ Describe(double_char)
 
 */
 
+string doubleChar(const string &str) {
+	return "";
+}
+
+void test_task1_16() {
+	assert(doubleChar("String") == "SSttrriinngg");
+	assert(doubleChar("Hello World!") == "HHeelllloo  WWoorrlldd!!");
+	assert(doubleChar("1234!_ ") == "11223344!!__  ");
+	assert(doubleChar("##^&%%*&%%$#@@!") == "####^^&&%%%%**&&%%%%$$##@@@@!!");
+	assert(doubleChar("scandal") == "ssccaannddaall");
+	assert(doubleChar("economics") == "eeccoonnoommiiccss");
+	assert(doubleChar(" ") == "  ");
+	assert(doubleChar("_______") == "______________");
+	assert(doubleChar("equip gallon read") == "eeqquuiipp  ggaalllloonn  rreeaadd");
+	assert(doubleChar("baby increase") == "bbaabbyy  iinnccrreeaassee");
+
+	cout << "task1_16 test finished" << endl;
+}
+
 void tasks::task1_16()
 {
-	std::cout << "Hello Task1_16!" << std::endl;
+	cout << "Hello Task1_16!" << endl;
+	cout << doubleChar("bla-bla-bla-bla") << endl;
+	test_task1_16();
 }
 
 /* Task 1_17 - Alphabet Soup
@@ -883,9 +1048,30 @@ Describe(alphabet_soup)
 
 */
 
+string alphabetSoup(const string &str) {
+	return "";
+}
+
+void test_task1_17() {
+	assert(alphabetSoup("hello") == "ehllo");
+	assert(alphabetSoup("edabit") == "abdeit");
+	assert(alphabetSoup("hacker") == "acehkr");
+	assert(alphabetSoup("geek") == "eegk");
+	assert(alphabetSoup("javascript") == "aacijprstv");
+	assert(alphabetSoup("credibility") == "bcdeiiilrty");
+	assert(alphabetSoup("apostrophe") == "aehoopprst");
+	assert(alphabetSoup("determination") == "adeeiimnnortt");
+	assert(alphabetSoup("win") == "inw");
+	assert(alphabetSoup("synthesis") == "ehinsssty");	
+
+	cout << "task1_17 test finished" << endl;
+}
+
 void tasks::task1_17()
 {
-	std::cout << "Hello Task1_17!" << std::endl;
+	cout << "Hello Task1_17!" << endl;
+	cout << alphabetSoup("bla-bla-bla") << endl;
+	test_task1_17();
 }
 
 /* Task 1_18 - Amplify the Multiples of Four
@@ -917,9 +1103,26 @@ Describe(amplify_four)
 
 */
 
+vector<int> amplify(int n) {
+	return { 1, 2, 3 };
+}
+
+void test_task1_18() {
+	assert(amplify(1) == vector<int>({ 1 }));
+	assert(amplify(4) == vector<int>({ 1, 2, 3, 40 }));
+	assert(amplify(8) == vector<int>({ 1, 2, 3, 40, 5, 6, 7, 80 }));
+	assert(amplify(25) == vector<int>({ 1, 2, 3, 40, 5, 6, 7, 80, 9, 10, 11, 120, 13, 14, 15, 160, 17, 18, 19, 200, 21, 22, 23, 240, 25 }));
+
+	cout << "task1_18 test finished" << endl;
+}
+
 void tasks::task1_18()
 {
-	std::cout << "Hello Task1_18!" << std::endl;
+	cout << "Hello Task1_18!" << endl;
+	for (auto x : amplify(15)) {
+		cout << x << endl;
+	}
+	test_task1_18();
 }
 
 /* Task 1_19 - Convenience Store
@@ -957,9 +1160,27 @@ Describe(enough_change_tests)
 
 */
 
+bool changeEnough(vector<int> change, float amountDue) {
+	return true;
+}
+
+void test_task1_19() {
+	assert(changeEnough({ 0, 0, 20, 5 }, 0.75) == true);
+	assert(changeEnough({ 30, 40, 20, 5 }, 12.55) == true);
+	assert(changeEnough({ 1, 0, 2555, 219 }, 127.75) == true);
+	assert(changeEnough({ 1, 335, 0, 219 }, 35.21) == true);
+	assert(changeEnough({ 2, 100, 0, 0 }, 14.11) == false);
+	assert(changeEnough({ 10, 0, 0, 50 }, 13.85) == false);
+	assert(changeEnough({ 1, 0, 5, 219 }, 19.99) == false);
+
+	cout << "task1_19 test finished" << endl;
+}
+
 void tasks::task1_19()
 {
-	std::cout << "Hello Task1_19!" << std::endl;
+	cout << "Hello Task1_19!" << endl;
+	cout << changeEnough({ 1, 2, 3, 4, 5}, 0.5) << endl;
+	test_task1_19();
 }
 
 /* Task 1_20 - Reverse the Order of a String
@@ -994,9 +1215,30 @@ Describe(reverse_order)
 
 */
 
+string reverse(const string &str) {
+	return "";
+}
+
+void test_task1_20() {
+	assert(reverse("Think different.") == ".tnereffid knihT");
+	assert(reverse("It doesnt make sense to hire smart people and tell them what to do; we hire smart people so they can tell us what to do.") == ".od ot tahw su llet nac yeht os elpoep trams erih ew ;od ot tahw meht llet dna elpoep trams erih ot esnes ekam tnseod tI");
+	assert(reverse("Innovation is the ability to see change as an opportunity - not a threat") == "taerht a ton - ytinutroppo na sa egnahc ees ot ytiliba eht si noitavonnI");
+	assert(reverse("Everything is based on a simple rule: Quality is the best business plan.") == ".nalp ssenisub tseb eht si ytilauQ :elur elpmis a no desab si gnihtyrevE");
+	assert(reverse("The people who are crazy enough to think they can change the world are the ones who do.") == ".od ohw seno eht era dlrow eht egnahc nac yeht kniht ot hguone yzarc era ohw elpoep ehT");
+	assert(reverse("Dont let the noise of others opinions drown out your own inner voice.") == ".eciov renni nwo ruoy tuo nword snoinipo srehto fo esion eht tel tnoD");
+	assert(reverse("Learn continually; Theres always one more thing to learn.") == ".nrael ot gniht erom eno syawla serehT ;yllaunitnoc nraeL");
+	assert(reverse("Quality is more important than quantity. One home run is much better than two doubles.") == ".selbuod owt naht retteb hcum si nur emoh enO .ytitnauq naht tnatropmi erom si ytilauQ");
+	assert(reverse("Your time is limited so dont waste it living someone elses life.") == ".efil sesle enoemos gnivil ti etsaw tnod os detimil si emit ruoY");
+	assert(reverse("The only way to be truly satisfied is to do what you believe is great work.") == ".krow taerg si eveileb uoy tahw od ot si deifsitas ylurt eb ot yaw ylno ehT");
+	
+	cout << "task1_20 test finished" << endl;
+}
+
 void tasks::task1_20()
 {
-	std::cout << "Hello Task1_20!" << std::endl;
+	cout << "Hello Task1_20!" << endl;
+	cout << reverse("string") << endl;
+	test_task1_20();
 }
 
 /* Task 1_21 - Equality of 3 Values
