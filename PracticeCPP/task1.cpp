@@ -283,24 +283,55 @@ It(test8){Assert::That(constructFence("$1000"), Equals("HHHHHHHHHHHHHHHHHHHHHHHH
 */
 
 string constructFence(const string &price) {
+	// делать модификацию строки или копировать новую к себе?
+	// проверять regex каждый символ?
+	// переводить каждый символ в int через stoi + try catch?
+	// проверять каждый символ через набор допустимых символов вручную?
+	
+	cout << "price = " << price << endl;
+	int fencePartCost = 0;
+	string fence = "";
 	string pr = price;
 	for (int i = 0; i < pr.length(); i++) {
 		try {
 			string str;
 			str += pr[i];
-			cout << "str=" << str << endl;
+			//cout << "str=" << str << endl;
 			int num = stoi(str);
-			cout << num << endl;
+			//cout << num << endl;
 		}
 		catch (const invalid_argument& err) {
-			cout << "can't be converted! " << endl;
+			//cout << "can't be converted! " << endl;
 			pr.replace(i,1,"");
 			i--;
 		}
 	}
-	cout << "price=" << price << " length=" << price.length() << endl;
-	cout << "pr=" << pr << " length=" << pr.length() << endl;
-	return pr;
+	//cout << "price=" << price << " length=" << price.length() << endl;
+	//cout << "pr=" << pr << " length=" << pr.length() << endl;
+
+	// 0?
+	// >1000000
+	try {
+		fencePartCost = stoi(pr);
+	}
+	catch (const invalid_argument& err) {
+		cout << "This is not a right amount " << endl;
+		return fence;
+	}
+
+	if (fencePartCost <= 0) {
+		return fence;
+	}
+
+	int fencePartsCount = 1000000 / fencePartCost;
+	//cout << "fencePartsCount=" << fencePartsCount;
+
+	for (int i = 0; i < fencePartsCount; i++) {
+		fence.append("H");
+	}
+	//cout << fence << endl;
+	cout << "fence = " << fence << endl;
+	return fence;
 }
 
 void test_task1_5() {
@@ -312,15 +343,17 @@ void test_task1_5() {
 	assert(constructFence("$10,000") == "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
 	assert(constructFence("$5000") == "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
 	assert(constructFence("$1000") == "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+	assert(constructFence("$2,000,000") == "");
+	assert(constructFence("$0") == "");
 	cout << "task1_5 test finished" << endl;
 }
 
 void tasks::task1_5()
 {
 	cout << "Hello Task1_5!" << endl;
-	cout << constructFence("$1,000,000,,000") << endl;
+	cout << constructFence("$1,000,000") << endl;
 	cout << constructFence("$,,,,") << endl;
-	//test_task1_5();
+	test_task1_5();
 }
 
 /* Task 1_6 - Triangular Number Sequence
