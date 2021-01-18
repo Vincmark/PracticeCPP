@@ -1956,10 +1956,26 @@ Describe(math_factorial)
 
 */
 
+int factorial(int num) {
+
+}
+
+void test_task1_31() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_30 test finished" << endl;
+}
+
 void tasks::task1_31()
 {
-	std::cout << "Hello Task1_31!" << std::endl;
+	cout << "Hello Task1_31!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_31();
 }
+
 
 /* Task 1_32 - Make a Circle with OOP
 
