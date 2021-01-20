@@ -1295,7 +1295,7 @@ Describe(tests) {
 */
 
 int equal(int a, int b, int c) {
-
+	return 0;
 }
 
 void test_task1_21() {
@@ -1352,7 +1352,7 @@ Describe(ArrayOfMultiplesTests) {
 */
 
 vector<int> arrayOfMultiples(int num, int length) {
-
+	return { 1,2,3 };
 }
 
 void test_task1_22() {
@@ -1412,7 +1412,7 @@ Describe(test_jackpot_tests)
 */
 
 bool testJackpot(const vector<string> &result) {
-
+	return true;
 }
 
 void test_task1_23() {
@@ -1466,14 +1466,14 @@ Describe(letter_to_next_letter)
 
 */
 
-string move(string word) {
-
+string moveNext(string word) {
+	return "";
 }
 
 void test_task1_24() {
-	assert(move("hello") == "ifmmp");
-	assert(move("lol") == "mpm");
-	assert(move("bye") == "czf");
+	assert(moveNext("hello") == "ifmmp");
+	assert(moveNext("lol") == "mpm");
+	assert(moveNext("bye") == "czf");
 
 	cout << "task1_24 test finished" << endl;
 }
@@ -1481,7 +1481,7 @@ void test_task1_24() {
 void tasks::task1_24()
 {
 	cout << "Hello Task1_24!" << endl;
-	cout << move("fhf jh g jfhhjgf");
+	cout << moveNext("fhf jh g jfhhjgf");
 	test_task1_24();
 }
 
@@ -1550,7 +1550,7 @@ Describe(count_ones_tests)
 */
 
 int count_ones(vector< vector<int> > matrix) {
-
+	return 0;
 }
 
 void test_task1_25() {
@@ -1601,7 +1601,7 @@ Describe(is_four_letters)
 */
 
 vector<string> isFourLetters(vector<string> arr) {
-
+	return { "1","2","3" };
 }
 
 void test_task1_26() {
@@ -1655,7 +1655,7 @@ Describe(is_string_in_order)
 */
 
 bool isInOrder(string str) {
-
+	return true;
 }
 
 void test_task1_27() {
@@ -1718,7 +1718,7 @@ Describe(x_o)
 */
 
 bool XO(string str) {
-
+	return true;
 }
 
 void test_task1_28() {
@@ -1770,7 +1770,7 @@ Describe(oddeven_) {
 */
 
 bool oddeven(const vector<int> &arr) {
-
+	return true;
 }
 
 void test_task1_29() {
@@ -1888,7 +1888,7 @@ Describe(reverse_image)
 */
 
 vector<vector<int>> reverseImage(vector<vector<int>> image) {
-
+	return { {1}, {2}, {3} };
 }
 
 void test_task1_30() {
@@ -1957,7 +1957,7 @@ Describe(math_factorial)
 */
 
 int factorial(int num) {
-
+	return 0;
 }
 
 void test_task1_31() {
@@ -1966,7 +1966,7 @@ void test_task1_31() {
 	assert(factorial(9) == 322880);
 	assert(factorial(2) == 2);
 
-	cout << "task1_30 test finished" << endl;
+	cout << "task1_31 test finished" << endl;
 }
 
 void tasks::task1_31()
@@ -2073,9 +2073,24 @@ Describe(circo_geometry)
 
 */
 
+/*int factorial(int num) {
+
+}*/
+
+void test_task1_32() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_32 test finished" << endl;
+}
+
 void tasks::task1_32()
 {
-	std::cout << "Hello Task1_32!" << std::endl;
+	cout << "Hello Task1_32!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_32();
 }
 
 /* Task 1_33 - Special Arrays
@@ -2109,9 +2124,20 @@ Describe(is_special_array)
 
 */
 
+void test_task1_33() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_33 test finished" << endl;
+}
+
 void tasks::task1_33()
 {
-	std::cout << "Hello Task1_33!" << std::endl;
+	cout << "Hello Task1_33!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_33();
 }
 
 /* Task 1_34 - Cumulative Array Sum
@@ -2148,9 +2174,20 @@ Describe(cumulative_sum)
 
 */
 
+void test_task1_34() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_34 test finished" << endl;
+}
+
 void tasks::task1_34()
 {
-	std::cout << "Hello Task1_34!" << std::endl;
+	cout << "Hello Task1_34!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_34();
 }
 
 /* Task 1_35 - Position in the Alphabet
@@ -2208,9 +2245,20 @@ It(test31){Assert::That(letterAtPosition(26.0), Equals('z'));}
 
 */
 
+void test_task1_35() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_35 test finished" << endl;
+}
+
 void tasks::task1_35()
 {
-	std::cout << "Hello Task1_35!" << std::endl;
+	cout << "Hello Task1_35!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_35();
 }
 
 /* Task 1_36 - Fix the Error
@@ -2259,9 +2307,20 @@ It(test4){Assert::That(checkEquals({4, 7, 6}, {4, 5, 6}), Equals(false));}
 };
 */
 
+void test_task1_36() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_36 test finished" << endl;
+}
+
 void tasks::task1_36()
 {
-	std::cout << "Hello Task1_36!" << std::endl;
+	cout << "Hello Task1_36!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_36();
 }
 
 /* Task 1_37 - Find the Missing Number
@@ -2292,9 +2351,20 @@ Describe(missing_nums)
 
 */
 
+void test_task1_37() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_37 test finished" << endl;
+}
+
 void tasks::task1_37()
 {
-	std::cout << "Hello Task1_37!" << std::endl;
+	cout << "Hello Task1_37!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_37();
 }
 
 /* Task 1_38 - Is the String a Palindrome?
@@ -2335,9 +2405,20 @@ Describe(check_palindrome)
 
 */
 
+void test_task1_38() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_38 test finished" << endl;
+}
+
 void tasks::task1_38()
 {
-	std::cout << "Hello Task1_38!" << std::endl;
+	cout << "Hello Task1_38!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_38();
 }
 
 /* Task 1_39 - Recursion: Fibonacci Numbers
@@ -2376,9 +2457,20 @@ Describe(fibonacci_numbers)
 
 */
 
+void test_task1_39() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_39 test finished" << endl;
+}
+
 void tasks::task1_39()
 {
-	std::cout << "Hello Task1_39!" << std::endl;
+	cout << "Hello Task1_39!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_39();
 }
 
 /* Task 1_40 - Largest Swap
@@ -2413,11 +2505,21 @@ Describe(largest_swap)
 
 */
 
-void tasks::task1_40()
-{
-	std::cout << "Hello Task1_40!" << std::endl;
+void test_task1_40() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_40 test finished" << endl;
 }
 
+void tasks::task1_40()
+{
+	cout << "Hello Task1_40!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_40();
+}
 /* Task 1_41 - Sum of all Evens in a Matrix
 
 Create a function that returns the sum of all even elements in a 2D matrix.
