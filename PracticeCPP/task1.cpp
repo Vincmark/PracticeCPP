@@ -2578,9 +2578,20 @@ Describe(sum_of_all_evens)
 
 */
 
+void test_task1_41() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_41 test finished" << endl;
+}
+
 void tasks::task1_41()
 {
-	std::cout << "Hello Task1_41!" << std::endl;
+	cout << "Hello Task1_41!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_41();
 }
 
 /* Task 1_42 - Is the Average of All Elements a Whole Number?
@@ -2613,9 +2624,20 @@ Describe(is_the_avg_whole_tests)
 
 */
 
+void test_task1_42() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_42 test finished" << endl;
+}
+
 void tasks::task1_42()
 {
-	std::cout << "Hello Task1_42!" << std::endl;
+	cout << "Hello Task1_42!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_42();
 }
 
 /* Task 1_43 - Solving Exponential Equations With Logarithms
@@ -2645,9 +2667,20 @@ Describe(tests)
 
 */
 
+void test_task1_43() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_43 test finished" << endl;
+}
+
 void tasks::task1_43()
 {
-	std::cout << "Hello Task1_43!" << std::endl;
+	cout << "Hello Task1_43!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_43();
 }
 
 /* Task 1_44 - Between Words
@@ -2684,9 +2717,20 @@ Describe(between_words)
 
 */
 
+void test_task1_44() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_44 test finished" << endl;
+}
+
 void tasks::task1_44()
 {
-	std::cout << "Hello Task1_44!" << std::endl;
+	cout << "Hello Task1_44!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_44();
 }
 
 /* Task 1_45 - Last Digit Ultimate
@@ -2736,9 +2780,20 @@ Describe (last_digit)
 
 */
 
+void test_task1_45() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_45 test finished" << endl;
+}
+
 void tasks::task1_45()
 {
-	std::cout << "Hello Task1_45!" << std::endl;
+	cout << "Hello Task1_45!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_45();
 }
 
 /* Task 1_46 - Capitalize the First Letter of Each Word
@@ -2788,9 +2843,20 @@ Describe(capitalize_words_tests)
 
 */
 
+void test_task1_46() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_46 test finished" << endl;
+}
+
 void tasks::task1_46()
 {
-	std::cout << "Hello Task1_46!" << std::endl;
+	cout << "Hello Task1_46!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_46();
 }
 
 /* Task 1_47 - Cowboy Shootout
@@ -2824,9 +2890,20 @@ It(test6){Assert::That(rogerShots({"BangBang!", "BangBang!", "Bag!", "Ban!", "Ta
 
 */
 
+void test_task1_47() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_47 test finished" << endl;
+}
+
 void tasks::task1_47()
 {
-	std::cout << "Hello Task1_47!" << std::endl;
+	cout << "Hello Task1_47!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_47();
 }
 
 /* Task 1_48 - Positive Count / Negative Sum
@@ -2863,9 +2940,20 @@ Describe(count_pos_sum_neg)
 
 */
 
+void test_task1_48() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_48 test finished" << endl;
+}
+
 void tasks::task1_48()
 {
-	std::cout << "Hello Task1_48!" << std::endl;
+	cout << "Hello Task1_48!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_48();
 }
 
 /* Task 1_49 - Reverse and Capitalize
@@ -2895,9 +2983,20 @@ Describe(tests)
 
 */
 
+void test_task1_49() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_49 test finished" << endl;
+}
+
 void tasks::task1_49()
 {
-	std::cout << "Hello Task1_49!" << std::endl;
+	cout << "Hello Task1_49!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_49();
 }
 
 /* Task 1_50 - Replace Vowels
@@ -2929,7 +3028,18 @@ Describe(Vowel_Replacer) {
 
 */
 
+void test_task1_50() {
+	assert(factorial(7) == 5040);
+	assert(factorial(1) == 1);
+	assert(factorial(9) == 322880);
+	assert(factorial(2) == 2);
+
+	cout << "task1_50 test finished" << endl;
+}
+
 void tasks::task1_50()
 {
-	std::cout << "Hello Task1_50!" << std::endl;
+	cout << "Hello Task1_50!" << endl;
+	cout << factorial(10) << endl;
+	test_task1_50();
 }
