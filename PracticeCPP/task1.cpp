@@ -1295,7 +1295,15 @@ Describe(tests) {
 */
 
 int equal(int a, int b, int c) {
-	return 0;
+	int result = 0;
+	if ((a != b) && (b != c) && (a != c))
+		result = 0;
+	else if ((a == b) && (b == c))
+		result = 3;
+	else if ((a == b) || (b == c) || (a == c))
+		result = 2;
+	cout << "a = " << a << " b = " << b << " c = " << c << " result = " << result << endl;
+	return result;
 }
 
 void test_task1_21() {
@@ -1352,7 +1360,11 @@ Describe(ArrayOfMultiplesTests) {
 */
 
 vector<int> arrayOfMultiples(int num, int length) {
-	return { 1,2,3 };
+	vector<int> result{};
+	for (int i = 0; i < length; i++) {
+		result.push_back(num*(i+1));
+	}
+	return result;
 }
 
 void test_task1_22() {
@@ -1370,7 +1382,7 @@ void tasks::task1_22()
 {
 	cout << "Hello Task1_22!" << endl;
 	for (auto x: arrayOfMultiples(10, 10)) {
-		cout << x;
+		cout << x << endl;
 	}
 	test_task1_22();
 }
@@ -1411,8 +1423,15 @@ Describe(test_jackpot_tests)
 
 */
 
-bool testJackpot(const vector<string> &result) {
-	return true;
+bool testJackpot(const vector<string> &result) {	
+	bool res = true;
+	for (int i = 0; i < result.size() - 1; i++)
+		if (result[i] != result[i + 1])
+		{
+			res = false;
+			break;
+		}
+	return res;
 }
 
 void test_task1_23() {
@@ -1467,7 +1486,11 @@ Describe(letter_to_next_letter)
 */
 
 string moveNext(string word) {
-	return "";
+	for (int i = 0; i < word.size(); i++) {
+		word[i] = word[i] + 1;
+	}
+
+	return word;
 }
 
 void test_task1_24() {
@@ -1481,7 +1504,7 @@ void test_task1_24() {
 void tasks::task1_24()
 {
 	cout << "Hello Task1_24!" << endl;
-	cout << moveNext("fhf jh g jfhhjgf");
+	cout << moveNext("abc");
 	test_task1_24();
 }
 
@@ -1550,7 +1573,12 @@ Describe(count_ones_tests)
 */
 
 int count_ones(vector< vector<int> > matrix) {
-	return 0;
+	int result = 0; 
+	for (auto x : matrix) 
+		for (auto y : x) 
+			if (y == 1)
+				result ++;
+	return result;
 }
 
 void test_task1_25() {
@@ -1567,7 +1595,7 @@ void test_task1_25() {
 void tasks::task1_25()
 {
 	cout << "Hello Task1_25!" << endl;
-	cout << count_ones({ {1, 0, 1}, {0, 0, 0}, {0, 0, 1} });
+	cout << count_ones({ {1, 2, 3}, {4, 5, 6}, {7, 8, 9} });
 	test_task1_25();
 }
 
@@ -1600,8 +1628,13 @@ Describe(is_four_letters)
 
 */
 
-vector<string> isFourLetters(vector<string> arr) {
-	return { "1","2","3" };
+vector<string> isFourLetters(const vector<string> &arr) {
+	vector <string> result{};
+	for (auto x : arr) {
+		if (x.size() == 4)
+			result.push_back(x);
+	}
+	return result;
 }
 
 void test_task1_26() {
@@ -1655,7 +1688,11 @@ Describe(is_string_in_order)
 */
 
 bool isInOrder(string str) {
-	return true;
+	bool result = true;
+	for (int i = 0; i < str.length() - 1; i++)
+		if (str[i] <= str[i + 1])
+			result = false;
+	return result;
 }
 
 void test_task1_27() {
@@ -1718,7 +1755,19 @@ Describe(x_o)
 */
 
 bool XO(string str) {
-	return true;
+	bool result = true;
+	int xCount = 0;
+	int oCount = 0;
+	for (auto x : str) {
+		if (toupper(x) == 'X')
+			xCount++;
+		if (toupper(x) == 'O')
+			oCount++;
+	}
+	if (xCount != oCount)
+		result = false;
+
+	return result;
 }
 
 void test_task1_28() {
@@ -1770,7 +1819,19 @@ Describe(oddeven_) {
 */
 
 bool oddeven(const vector<int> &arr) {
-	return true;
+	bool result = false;
+	int oddCount = 0;
+	int evenCount = 0;
+	for (auto x : arr) {
+		if (x % 2 == 0)
+			evenCount++;
+		else 
+			oddCount++;
+	}
+	if (oddCount > evenCount)
+		result = true;
+
+	return result;
 }
 
 void test_task1_29() {
@@ -1888,7 +1949,13 @@ Describe(reverse_image)
 */
 
 vector<vector<int>> reverseImage(vector<vector<int>> image) {
-	return { {1}, {2}, {3} };
+	for (int i = 0; i< image.size();i++)
+		for (int j = 0; j < image[i].size(); j++)
+			if (image[i][j] == 0)
+				image[i][j] = 1;
+			else if (image[i][j] == 1)
+				image[i][j] = 0;
+	return image;	
 }
 
 void test_task1_30() {

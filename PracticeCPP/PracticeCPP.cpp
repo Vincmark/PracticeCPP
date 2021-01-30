@@ -18,6 +18,7 @@ int main()
     //task1_7();
     //task1_8();
     //task1_9();
+    
     //task1_10();
     //task1_11();
     //task1_12();
@@ -28,9 +29,8 @@ int main()
     //task1_17();
     //task1_18();
     //task1_19();
-    task1_20();
-
     //task1_20();
+
     //task1_21();
     //task1_22();
     //task1_23();
@@ -40,9 +40,8 @@ int main()
     //task1_27();
     //task1_28();
     //task1_29();
-    //task1_30();
+    task1_30();
 
-    //task1_30();
     //task1_31();
     //task1_32();
     //task1_33();
@@ -54,7 +53,6 @@ int main()
     //task1_39();
     //task1_40();
 
-    //task1_40();
     //task1_41();
     //task1_42();
     //task1_43();
